@@ -3,8 +3,16 @@ import ButtonComponent from "../../components/ButtonComponent"
 import InputComponent from "../../components/InputComponent"
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { useState } from "react";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  }
+
   return (
     <form className="flex justify-center items-center" type='submit'>
         <div className="bg-slate-50 h-100 w-85 lg:w-100 relative top-55 
@@ -28,11 +36,18 @@ const LoginPage = () => {
                 <RiLockPasswordFill 
                 className="h-5 w-5 relative left-8 z-10 sm:h-6 sm:w-6 text-gray-600"/>
                 <InputComponent 
-                type={`password`}
+                type={!showPassword ? 'text' : 'password'}
                 placeholder={`Password`}
                 name={`password`}
                 className={`text-black relative bg-gray-100 text-sm pl-12 lg:w-85`}
                 />
+
+               <div
+                className="absolute right-12 text-[18px] cursor-pointer text-gray-900"
+                onClick={togglePassword}
+                >
+                  {!showPassword ? <IoMdEye /> : <IoMdEyeOff />}
+                </div>
               </span>
 
               {/* Button */}
