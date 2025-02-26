@@ -1,53 +1,147 @@
 import { Link } from "react-router-dom";
-import ButtonComponent from "../../components/ButtonComponent"
-import InputComponent from "../../components/InputComponent"
-import { MdEmail } from "react-icons/md";
-import { RiLockPasswordFill } from "react-icons/ri";
+import ButtonComponent from "../../components/ButtonComponent";
+import InputComponent from "../../components/InputComponent";
+import { MdEmail, MdPermContactCalendar } from "react-icons/md";
+import PasswordFieldComponent from "../../components/PasswordFieldComponent";
+import { FaLocationDot, FaUser } from "react-icons/fa6";
+import { validateForm } from "../../utils/Validation";
+import { useState } from "react";
 
 const RegisterPage = () => {
+  const [errors, setErrors] = useState({});
+  const [userData, setUserData] = useState({
+    userName: "",
+    email: "",
+    contact: "",
+    address: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validateForm(userData);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length === 0) {
+      await alert("submitted");
+    }
+  };
+
   return (
-    <form className="flex justify-center items-center" type='submit'>
-        <div className="bg-slate-50 h-100 w-85 lg:w-100 relative top-55 
-        rounded-[20px] shadow-2xl drop-shadow-2xl sm:h-105 sm:w-85 lg:top-35">
-            <h3 className="text-center p-7 text-blue-500 text-[25px] sm:text-[28px] font-bold">
-              Login
-            </h3>
-            <div className="flex flex-col justify-center items-center lg:-mt-2">
-              <span className="flex justify-center items-center mr-5">
-                <MdEmail className="h-5 w-5 relative left-8 z-10  sm:h-6 sm:w-6 text-gray-600 "/>
-                <InputComponent 
-                type={`email`}
-                placeholder={`Email`}
-                name={`email`}
-                className={`text-black relative bg-gray-100 text-sm pl-12 lg:w-85 `}
-                />
+    <form className="flex justify-center items-center min-h-screen py-10 " onSubmit={handleSubmit}>
+      <div className="bg-slate-50 p-8 w-85 lg:w-[600px] rounded-[20px] shadow-2xl md:mt-20 lg:mt-15">
+        <h3 className="text-center text-blue-500 text-[25px] sm:text-[28px] font-bold mb-6">
+          Register
+        </h3>
 
-              </span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Username Field */}
+          <div className="relative">
+            <span className="flex items-center">
+              <FaUser className="h-5 w-5 absolute left-3 lg:left-4 z-10 text-gray-600" />
+              <InputComponent
+                type="text"
+                placeholder="Username"
+                name="userName"
+                value={userData.userName}
+                onChange={handleChange}
+                
+              />
+            </span>
+            {errors.userName && <p className="text-red-500 text-sm">{errors.userName}</p>}
+          </div>
 
-              <span className="flex justify-center items-center mt-6 mr-5">
-                <RiLockPasswordFill 
-                className="h-5 w-5 relative left-8 z-10 sm:h-6 sm:w-6 text-gray-600"/>
-                <InputComponent 
-                type={`password`}
-                placeholder={`Password`}
-                name={`password`}
-                className={`text-black relative bg-gray-100 text-sm pl-12 lg:w-85`}
-                />
-              </span>
+          {/* Email Field */}
+          <div className="relative">
+            <span className="flex items-center">
+              <MdEmail className="h-5 w-5 absolute left-3 lg:left-4 z-10 text-gray-600" />
+              <InputComponent
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={userData.email}
+                onChange={handleChange}
+               
+              />
+            </span>
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
 
-              {/* Button */}
-              <div className="flex justify-center items-center mt-8 sm:mt-8">
-                <ButtonComponent text={'Login'} type={`button`} className="w-70 lg:w-80"/>
-              </div>
+          {/* Contact Field */}
+          <div className="relative">
+            <span className="flex items-center">
+              <MdPermContactCalendar className="h-5 w-5 absolute left-3 lg:left-4 z-10 text-gray-600" />
+              <InputComponent
+                type="tel"
+                placeholder="Contact"
+                name="contact"
+                value={userData.contact}
+                onChange={handleChange}
+               
+              />
+            </span>
+            {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
+          </div>
 
-            {/* Registration Link */}
-             <p className="text-gray-500 pt-8 sm:pt-10 text-[14px] sm:text-[16px] lg:text-[15px] ">
-                Don't Have an Account? 
-                <Link to='/signup' className="underline pl-1 text-blue-500 text-[14px] lg:text-[15px]">SignUp</Link>
-              </p>
+          {/* Address Field */}
+          <div className="relative">
+            <span className="flex items-center">
+              <FaLocationDot className="h-5 w-5 absolute left-3 lg:left-4 z-10 text-gray-600" />
+              <InputComponent
+                type="text"
+                placeholder="Address"
+                name="address"
+                value={userData.address}
+                onChange={handleChange}
+                
+              />
+            </span>
+            {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+          </div>
+
+          {/* Password Field */}
+          <div>
+            <PasswordFieldComponent
+              placeholder="Password"
+              name="password"
+              value={userData.password}
+              onChange={handleChange}
+            />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </div>
+
+          {/* Confirm Password Field */}
+          <div >
+            <PasswordFieldComponent
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              value={userData.confirmPassword}
+              onChange={handleChange}
+            />
+            {errors.confirmPassword && 
+            <p className="text-red-500 text-sm">
+              {errors.confirmPassword}</p>}
           </div>
         </div>
+
+         {/* Button */}
+        <div className="flex justify-center items-center mt-6">
+          <ButtonComponent text="Register" type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" />
+        </div>
+
+        {/* Registration Link */}
+        <p className="text-gray-500 pt-6 text-sm text-center">
+          Already Have an Account?
+          <Link to="/login" className="underline pl-1 text-sm text-blue-500">Sign In</Link>
+        </p>
+      </div>
     </form>
-  )
-}
-export default RegisterPage
+  );
+};
+
+export default RegisterPage;
