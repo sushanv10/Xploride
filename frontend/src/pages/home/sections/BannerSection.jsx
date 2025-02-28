@@ -27,11 +27,11 @@ function BannerSection() {
 
   return (
     <div className="relative mt-80 xs:mt-6 sm:mt-118 md:mt-136 lg:mt-210 w-full">
-      <div className="bg-blue-400 min-h-[200px] xs:min-h-[220px] sm:min-h-[250px]
+      <div className="bg-[rgba(22,22,22,0.72)] min-h-[200px] xs:min-h-[220px] sm:min-h-[250px]
        md:min-h-[280px] lg:min-h-[100px] w-full">
         <div className="flex flex-col items-center p-6 sm:p-8">
           {/* Title */}
-          <h1 className="text-white p-4 text-[16px] xs:text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-center font-bold">
+          <h1 className="text-[#C6E4FF] p-4 text-[16px] xs:text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-center font-bold">
             It's Your Ride! Choose Your Colour!!
           </h1>
 
@@ -49,7 +49,8 @@ function BannerSection() {
           </div>
 
           {/* Button */}
-          <button className="mt-5 xs:mt-6 sm:mt-8 md:mt-10 lg:mt-2 px-6 py-2 text-white underline cursor-pointer font-semibold hover:text-gray-900 transition">
+          <button className="mt-5 xs:mt-6 sm:mt-8 md:mt-10 lg:mt-2 px-6 py-2
+           text-white underline cursor-pointer font-semibold hover:text-blue-400 transition">
            <Link to='/shop'>Shop Now</Link>
           </button>
         </div>

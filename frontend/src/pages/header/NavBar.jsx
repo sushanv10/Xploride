@@ -43,7 +43,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className={`bg-black opacity-85 h-18 w-full fixed z-50 
+      <nav className={`bg-black h-18 w-full fixed z-50 
         ${window.innerWidth >= 1024 ? 'lg:transition-transform lg:duration-500' : ''}
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between p-4 items-center w-full">
@@ -95,9 +95,9 @@ const NavBar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-black h-[18rem] w-full ">
+          <div className="md:hidden bg-black h-[17rem] w-full ">
             <ul className="flex flex-col items-center justify-center gap-5 
-            p-10 text-white cursor-pointer font-medium">
+            p-10 text-gray-200 cursor-pointer font-medium">
               <li><Link to='/'>HOME</Link></li>
               <li><Link to='/about'>ABOUT</Link></li>
               <li><Link to='/shop'>SHOP</Link></li>

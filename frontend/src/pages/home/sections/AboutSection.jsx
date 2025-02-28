@@ -3,10 +3,10 @@ import ButtonComponent from "../../../components/ButtonComponent";
 const AboutSection = () => {
   return (
     <div className="relative top-81 xs:top-60 sm:top-118 md:top-142 lg:top-218 w-full">
-      <div className="bg-[rgb(31,30,30)] min-h-[350px] xs:min-h-[380px] sm:min-h-[395px] md:min-h-[440px] lg:min-h-[550px] flex items-center justify-center px-4">
+      <div className="bg-[rgb(0,0,0)] min-h-[350px] xs:min-h-[380px] sm:min-h-[395px] md:min-h-[440px] lg:min-h-[550px] flex items-center justify-center px-4">
         <div className="flex flex-col text-center gap-4 md:-mt-8 max-w-3xl mx-auto">
           {/* About Us Title */}
-          <h3 className="text-white text-[18px] xs:text-[20px] sm:text-[22px] md:text-[24px] lg:text-[26px] font-medium">
+          <h3 className="text-[#C6E4FF]  text-[18px] xs:text-[20px] sm:text-[22px] md:text-[24px] lg:text-[26px] font-medium">
             About Us
           </h3>
 
