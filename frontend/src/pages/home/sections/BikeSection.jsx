@@ -1,10 +1,10 @@
-import React from 'react'
+import HeadingComponent from '../../../components/HeadingComponent';
 
 const BikeSection = () => {
   return (
-    <div className='bg-[rgb(0,0,0)]  relative -top-5 h-180'>
-        <div className="text-center text-[#C6E4FF]  ">
-            <h1 className='text-2xl font-bold '>Popular Bikes </h1>
+    <div className='min-h-screen w-full '>
+        <div className="text-center ">
+            <HeadingComponent text={"Popular Bikes "}/>
         </div>
       
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import HeadingComponent from "../../../components/HeadingComponent";
 
 function BannerSection() {
   const [bannerImages, setBannerImages] = useState([]);
@@ -31,9 +32,7 @@ function BannerSection() {
        md:min-h-[280px] lg:min-h-[100px] w-full">
         <div className="flex flex-col items-center p-6 sm:p-8">
           {/* Title */}
-          <h1 className="text-[#C6E4FF] p-4 text-[16px] xs:text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-center font-bold">
-            It's Your Ride! Choose Your Colour!!
-          </h1>
+          <HeadingComponent text={"It's Your Ride! Choose Your Colour!!"} className='text-center'/>
 
           {/* Banner Images */}
           <div className="flex flex-wrap justify-center gap-10 sm:gap-15 md:gap-20 lg:gap-40 mt-4">
