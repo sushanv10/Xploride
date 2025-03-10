@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoCloseSharp } from "react-icons/io5";
+import LogoComponent from "../../../components/LogoComponent";
 
 const HeaderComponent = () => {
   const [showSearch, setShowSearch] = useState(false);
@@ -10,17 +11,13 @@ const HeaderComponent = () => {
   };
 
   return (
-    <nav className="bg-white text-gray-600 shadow-md h-17 w-full">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+    <nav className="bg-[#0C0C0C] text-gray-400 shadow-md h-19 w-full">
+      <div className="container mx-auto px-4 py-5 flex items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
+          <LogoComponent/>
           
-          <a href="#" className="hidden md:block hover:text-gray-300">
-            Home
-          </a>
-          <a href="#" className="hidden md:block hover:text-gray-300">
-            Contact
-          </a>
+        
         </div>
 
         {/* Right Section */}

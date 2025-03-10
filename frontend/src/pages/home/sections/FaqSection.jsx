@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import HeadingComponent from "../../../components/HeadingComponent";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
@@ -33,22 +34,22 @@ const FaqSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full px-5 sm:px-8 md:px-12 lg:px-10 py-10">
-      <HeadingComponent text="FAQs" className="" />
+    <div className="min-h-screen w-full px-5 sm:px-8 md:px-12 lg:px-10 py-20">
+      <HeadingComponent text="FAQs" />
 
-      <div className=" mt-5 ">
+      <div className="mt-5">
         <h1 className="text-white text-2xl sm:text-3xl lg:text-4xl font-semibold">
           Frequently Asked <br /> Questions
         </h1>
       </div>
 
       {/* FAQ List */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
-          <div className="mt-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
+        <div className="mt-5">
           {faqs.map((faq, index) => (
             <div key={index} className="mb-6">
               <div
-                className="flex justify-between items-center cursor-pointer py-5 px-2  "
+                className="flex justify-between items-center cursor-pointer py-5 px-2"
                 onClick={() => toggleQuestion(index)}
               >
                 <p className="text-white text-sm sm:text-base">{faq.question}</p>
@@ -59,28 +60,34 @@ const FaqSection = () => {
                 )}
               </div>
 
-              {openIndex === index && (
-                <div className="text-gray-400 text-sm sm:text-base lg:text-[20px] 
-                px-2 py-3 transition-all duration-500">
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: openIndex === index ? "auto" : 0,
+                  opacity: openIndex === index ? 1 : 0,
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <p className="text-gray-400 text-sm sm:text-base lg:text-[18px] px-2 py-3">
                   {faq.answer}
-                </div>
-              )}
+                </p>
+              </motion.div>
 
               <div className="border-b border-gray-500"></div>
             </div>
           ))}
         </div>
 
-      {/* Image Section */}
-        <div className=" flex justify-center">
+        {/* Image Section */}
+        <div className="flex justify-center">
           <img
             src="https://askproject.net/venturo/wp-content/uploads/sites/84/2022/06/bike-UYC7MT6.jpg"
-            className="  w-full max-w-[800px] rounded-md shadow-md"
+            className="w-full max-w-[800px] rounded-md shadow-md"
             alt="Bike Rental"
           />
         </div>
       </div>
-
     </div>
   );
 };

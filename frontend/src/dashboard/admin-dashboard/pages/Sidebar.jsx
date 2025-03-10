@@ -28,21 +28,21 @@ const Sidebar = () => {
     <div className="relative">
       {/* Hamburger Menu */}
       <div
-        className="absolute top-4 left-4 text-white text-2xl cursor-pointer z-50"
+        className="absolute top-6 left-4 text-white text-2xl cursor-pointer z-50"
         onClick={toggleSideBar}
       >
-        {showSideBar ? <IoCloseSharp /> : <RxHamburgerMenu className="text-black" />}
+        {showSideBar ? <IoCloseSharp /> : <RxHamburgerMenu className="text-white" />}
       </div>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-gray-300 text-sm shadow-lg transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-[#0C0C0C] text-gray-300 text-sm shadow-lg transition-transform duration-300 ${
           showSideBar ? "translate-x-0" : "-translate-x-64"
         }`}
       >
         {/* Brand Logo */}
-        <div className="flex items-center justify-center py-2 border-b border-gray-700">
-          <LogoComponent/>
+        <div className="flex items-center justify-center py-5 border-b border-gray-700">
+          <LogoComponent className={''}/>
         </div>
 
         {/* Navigation */}

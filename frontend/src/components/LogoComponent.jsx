@@ -1,7 +1,7 @@
 
-const LogoComponent = () => {
+const LogoComponent = ({className}) => {
   return (
-    <div className="flex items-center cursor-pointer">
+    <div className={`flex items-center cursor-pointer ${className}`}>
         <h1 className="text-blue-400 text-3xl font-bold">X</h1>
         <h1 className="text-white text-2xl font-medium">ploride</h1>
     </div>

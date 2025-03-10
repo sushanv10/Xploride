@@ -1,47 +1,36 @@
-const {DataTypes, UUID} = require('sequelize');
-const {sequelize}= require('../config/db');
+const db = require('../config/db'); // ✅ Import correctly
 
-const User = sequelize.define('users', {
-    userId:{
-        type: DataTypes.INTEGER,
-        defaultValue: DataTypes.UUIDV4,
-        autoIncrement: true,
-        primaryKey: true
-    },
 
-    userName:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+exports.createUser = async (userName, email, password, address, contact, role) => {
+    try {
+        console.log("Registering user:", userName, email); 
 
-    email:{
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
-    },
+        const [result] = await db.execute(
+            "INSERT INTO users (userName, email, password, address, contact, role) VALUES(?,?,?,?,?,?)",
+            [userName, email, password, address, contact, role || "user"]
+        );
 
-    password:{ 
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-
-    phone:{
-        type: DataTypes.BIGINT,
-        allowNull:false
-    },
-
-    address:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-
-    role:{
-        type: DataTypes.ENUM('admin', 'user'),
-        allowNull: false,
-        defaultValue: 'user'
+        console.log("Insert Result:", result); 
+        return result;
+    } catch (error) {
+        console.error("Error inserting user:", error);
+        throw error;
     }
-}, {
-    timestamps: true
-});
+};
 
-module.exports = User;
+exports.findUserByEmail = async (email) => {
+    const [users] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+    return users.length > 0 ? users[0] : null;
+};
+
+exports.findUserById = async (userId) => {
+    if (userId === undefined || userId === null) {  // ✅ Fix: Allow userId = 0
+        throw new Error("User ID is undefined or null");
+    }
+
+    console.log("Finding user with ID:", userId); // Debugging
+
+    const [users] = await db.execute("SELECT * FROM users WHERE userId = ?", [userId]);
+
+    return users.length > 0 ? users[0] : null;
+};

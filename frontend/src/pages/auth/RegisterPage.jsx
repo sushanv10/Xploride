@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import { MdEmail, MdPermContactCalendar } from "react-icons/md";
@@ -6,6 +6,8 @@ import PasswordFieldComponent from "../../components/PasswordFieldComponent";
 import { FaLocationDot, FaUser } from "react-icons/fa6";
 import { validateForm } from "../../utils/Validation";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState({});
@@ -17,22 +19,46 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
   });
+  const navigate= useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+  
+  setErrors((prevErrors) => ({
+    ...prevErrors,
+    [name]: "", 
+  }));
+
+  setUserData({ ...userData, [name]: value });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm(userData);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
-      await alert("submitted");
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/register", userData
+         
+        );
+        console.log(response)
+        toast.success("Registration Successfull");
+        setTimeout(() => {
+          navigate('/login')
+        },3000);
+      } catch (error) {
+        console.log("Error:",error.response?.data?.msg || error.message);
+        toast.error(error.response?.data?.msg || "Registration failed");
+        
+      }
     }
   };
 
   return (
+    <>
+    <ToastContainer />
     <form className="flex justify-center items-center min-h-screen py-10 " onSubmit={handleSubmit}>
       <div className="bg-slate-50 p-8 w-85 lg:w-[600px] rounded-[20px] shadow-2xl md:mt-20 lg:mt-15">
         <h3 className="text-center text-blue-500 text-[25px] sm:text-[28px] font-bold mb-6">
@@ -141,6 +167,7 @@ const RegisterPage = () => {
         </p>
       </div>
     </form>
+    </>
   );
 };
 

@@ -28,7 +28,7 @@ function BannerSection() {
 
   return (
     <div className="relative mt-80 xs:mt-6 sm:mt-118 md:mt-136 lg:mt-210 w-full">
-      <div className="bg-[rgba(22,22,22,0.72)] min-h-[200px] xs:min-h-[220px] sm:min-h-[250px]
+      <div className="bg-[#0C0C0C] min-h-[200px] xs:min-h-[220px] sm:min-h-[250px]
        md:min-h-[280px] lg:min-h-[100px] w-full">
         <div className="flex flex-col items-center p-6 sm:p-8">
           {/* Title */}

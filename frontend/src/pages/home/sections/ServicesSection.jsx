@@ -32,7 +32,7 @@ const ServicesSection = () => {
     <div className="relative top-0 h-[66rem] sm:h-[46rem] md:h-[54rem] lg:h-[58rem] w-full px-4 sm:px-6 md:px-12 lg:px-16">
       {/* Title Section */}
       <div className="pt-10 text-center">
-      <HeadingComponent text={"Our Services"} className="text-center" />
+      <HeadingComponent text={"Our Services"} className="" />
         <h2 className="text-white pt-4 font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
           We are There, Where You
         </h2>

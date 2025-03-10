@@ -3,9 +3,10 @@ import { FaUser } from "react-icons/fa6";
 import { IoSearchOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { useState, useEffect, useRef } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Search from "../Search";
 import LogoComponent from "../../components/LogoComponent";
+import { useAuth } from "../../context/AuthContext";
 
 
 const NavBar = () => {
@@ -13,6 +14,8 @@ const NavBar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const [showSearch, setShowSearch] = useState(false);
+  const [auth] = useAuth();
+  const navigate= useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +42,14 @@ const NavBar = () => {
 
   const toggleSearch = () => {
     setShowSearch(!showSearch)
+  }
+
+  const handleProfileClick = () => {
+    if(auth.user){
+      navigate('/profile');
+    } else{
+      navigate('/login');
+    }
   }
 
   return (
@@ -82,8 +93,8 @@ const NavBar = () => {
               </div>
             </div>
             {/* Profile */}
-            <button className="cursor-pointer flex">
-              <Link to='/login'><FaUser className="text-white text-[18px] hover:text-blue-400 "/></Link>
+            <button className="cursor-pointer flex" onClick={handleProfileClick}>
+              <FaUser className="text-white text-[18px] hover:text-blue-400 "/>
             </button>
 
             {/* Hamburger Menu (Mobile Only) */}
