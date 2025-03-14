@@ -1,10 +1,9 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonComponent from '../../components/ButtonComponent';
 import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Cookies from 'js-cookie';
+import axiosInstance from '../../config/AxiosConfig';
 
 function UserDashboard() {
     const navigate = useNavigate();
@@ -12,7 +11,7 @@ function UserDashboard() {
 
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
+            await axiosInstance.post("auth/logout", {}, { withCredentials: true });
 
             // Clear authentication state
             setAuth({ userData: null, token: "" });

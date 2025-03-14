@@ -1,5 +1,3 @@
-import InputComponent from '../components/InputComponent'
-
 const Search = () => {
   return (
     <div className='flex justify-center items-center mt-60 '>

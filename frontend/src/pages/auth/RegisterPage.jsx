@@ -7,7 +7,7 @@ import { FaLocationDot, FaUser } from "react-icons/fa6";
 import { validateForm } from "../../utils/Validation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
+import axiosInstance from "../../config/AxiosConfig";
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState({});
@@ -32,15 +32,14 @@ const RegisterPage = () => {
   setUserData({ ...userData, [name]: value });
 };
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validateForm(userData);
-    setErrors(validationErrors);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const validationErrors = validateForm(userData);
+  setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/auth/register", userData
+        const response = await axiosInstance.post(
+          "auth/register", userData
          
         );
         console.log(response)
@@ -52,9 +51,9 @@ const RegisterPage = () => {
         console.log("Error:",error.response?.data?.msg || error.message);
         toast.error(error.response?.data?.msg || "Registration failed");
         
-      }
     }
-  };
+  }
+};
 
   return (
     <>

@@ -1,16 +1,23 @@
 import { MdDashboard, MdDirectionsBike, MdOutlineProductionQuantityLimits, MdOutlineTour } from "react-icons/md";
 import { CiViewList } from "react-icons/ci";
-import { FaWpforms } from "react-icons/fa6";
 import { IoAdd, IoBagAddSharp, IoCloseSharp } from "react-icons/io5";
-import { IoIosArrowDown, IoIosArrowUp, IoIosRadioButtonOff } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import LogoComponent from "../../../components/LogoComponent";
+import ButtonComponent from "../../../components/ButtonComponent";
+import axiosInstance from "../../../config/AxiosConfig";
+import { useAuth } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import Cookies from 'js-cookie';
 
 const Sidebar = () => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [productDropdown, setProductDropdown] = useState(true);
   const [bikeDropDown, setBikedropdown] = useState(true);
+  const [auth, setAuth]= useAuth();
+  const navigate= useNavigate();
 
   const toggleProductDropdown = () => {
     setProductDropdown(!productDropdown);
@@ -24,7 +31,34 @@ const Sidebar = () => {
     setShowSideBar(!showSideBar);
   };
 
+ const handleLogout = async () => {
+  try {
+    // Show success toast before logging out
+    
+    // Make the logout request
+    await axiosInstance.post("auth/logout", {}, { withCredentials: true });
+    
+    // Clear authentication state
+    setAuth({ userData: null, token: "" });
+    
+    // Remove auth data from cookies and local storage
+    Cookies.remove("accessToken");
+    localStorage.removeItem("userData");
+    
+    toast.success("Logged out successfully!");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000); 
+  } catch (error) {
+    console.log(error);
+    toast.error("Logout failed. Please try again.");
+  }
+  };
+
   return (
+    <>
+    <ToastContainer/>
     <div className="relative">
       {/* Hamburger Menu */}
       <div
@@ -136,32 +170,8 @@ const Sidebar = () => {
                   <span className="pl-3">Add Bike</span>
                 </a>
               </li>
-                
-                
               
               </div>}
-            </li>
-
-            {/* Forms */}
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <FaWpforms className="h-6 w-6" />
-                <span className="pl-3">Forms</span>
-              </a>
-            </li>
-
-            {/* Button */}
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <IoIosRadioButtonOff  className="h-6 w-6" />
-                <span className="pl-3">Buttons</span>
-              </a>
             </li>
 
             <li>
@@ -175,8 +185,14 @@ const Sidebar = () => {
             </li>
           </ul>
         </nav>
+       
+        <div className='relative flex left-10'>
+          <ButtonComponent text={'Logout'} onClick={handleLogout} />
+        </div>
+
       </aside>
     </div>
+    </>
   );
 };
 

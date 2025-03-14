@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import { MdEmail } from "react-icons/md";
-import { useAuth } from "../../context/AuthContext"; // Import useAuth
+import { useAuth } from "../../context/AuthContext"; 
 import { validateEmail, validatePassword } from "../../utils/Validation";
 import PasswordFieldComponent from "../../components/PasswordFieldComponent";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Circles } from 'react-loading-icons';
+import axiosInstance from "../../config/AxiosConfig";
 
 const LoginPage = () => {
   const [errors, setErrors] = useState({});
@@ -17,6 +17,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
 
+  // Handle change function for input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -28,6 +29,7 @@ const LoginPage = () => {
     setUserData({ ...userData, [name]: value });
   };
 
+  // Handle submit function 
   const handleSubmit = async (e) => {
     e.preventDefault();
    
@@ -52,14 +54,15 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        userData,
-        { withCredentials: true }
+      const response = await axiosInstance.post(
+        "auth/login",
+        userData, {
+          withCredentials: true,
+        }
       );
 
       const { accessToken, data } = response.data;
-
+      
       if (!accessToken) {
         throw new Error("Invalid server response");
       }
@@ -72,7 +75,11 @@ const LoginPage = () => {
 
       toast.success("Login successful");
       setTimeout(() => {
-        navigate("/"); // Redirect to homepage or profile
+        if(data.role == 'admin'){
+          navigate('/admin/dashboard')
+        } else{
+            navigate("/"); 
+        }
       }, 1000);
     } catch (error) {
       console.error(error.response?.data?.message || error.message);

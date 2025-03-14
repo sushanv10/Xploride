@@ -1,12 +1,13 @@
 import { GiHamburgerMenu, GiShoppingBag } from "react-icons/gi";
-import { FaUser } from "react-icons/fa6";
-import { IoSearchOutline } from "react-icons/io5";
+import {FaUser } from "react-icons/fa6";
+import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Search from "../Search";
 import LogoComponent from "../../components/LogoComponent";
 import { useAuth } from "../../context/AuthContext";
+import { motion } from "framer-motion";
 
 
 const NavBar = () => {
@@ -41,7 +42,7 @@ const NavBar = () => {
   };
 
   const toggleSearch = () => {
-    setShowSearch(!showSearch)
+    setShowSearch(!showSearch);
   }
 
   const handleProfileClick = () => {
@@ -52,6 +53,10 @@ const NavBar = () => {
     }
   }
 
+  if(auth.user?.role === 'admin'){
+    return null;
+  } else {
+    
   return (
     <>
       <nav className={`bg-black h-18 w-full fixed z-50 
@@ -77,13 +82,22 @@ const NavBar = () => {
             <button onClick={toggleSearch}>
               <IoSearchOutline 
               className="text-white text-[20px] hover:text-blue-400 transition cursor-pointer"
-            
             />
             </button>
+
+            {/* search bar */}
             {showSearch && 
-            <div className="bg-black min-h-screen w-full absolute top-18 left-0 right-0">
+            <motion.div 
+            initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 100,
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                
+            className="bg-[rgba(0,0,0,0.77)] min-h-screen w-full absolute top-18 left-0 right-0">
+              <IoClose className="text-gray-400 text-[30px] absolute right-5 " onClick={toggleSearch} />
               <Search/>
-            </div> 
+            </motion.div> 
             }
            
             <div className="relative">
@@ -120,6 +134,7 @@ const NavBar = () => {
       </nav>
     </>
   );
-};
+ };
+}
 
 export default NavBar;
