@@ -4,7 +4,7 @@ import InputComponent from "../../components/InputComponent";
 import { MdEmail, MdPermContactCalendar } from "react-icons/md";
 import PasswordFieldComponent from "../../components/PasswordFieldComponent";
 import { FaLocationDot, FaUser } from "react-icons/fa6";
-import { validateForm } from "../../utils/Validation";
+import { validateForm } from "../../utils/validation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axiosInstance from "../../config/AxiosConfig";

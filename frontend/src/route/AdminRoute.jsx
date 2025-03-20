@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../config/AxiosConfig";
-import { Outlet, useNavigate } from "react-router-dom"; // Use useNavigate for redirection
+import { Outlet, useNavigate } from "react-router-dom"; 
 
 export default function AdminRoute() {
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
-  const [auth] = useAuth(); // Fixed destructuring here
+  const [auth, setAuth] = useAuth(); // Fixed destructuring here
   const navigate = useNavigate(); // For redirection
 
   useEffect(() => {
@@ -18,14 +18,15 @@ export default function AdminRoute() {
           setOk(true);
         } else {
           setOk(false);
-          navigate("/unauthorized"); // Redirect if not authorized
+          navigate("/login"); 
+          console.log('hello')
         }
       } catch (error) {
         console.log(error);
         setOk(false);
-        navigate("/login"); // Redirect to login on error (e.g., token expired)
+        navigate("/login");
       } finally {
-        setLoading(false); // Hide loading after check
+        setLoading(false); 
       }
     };
 
@@ -38,8 +39,8 @@ export default function AdminRoute() {
   }, [auth?.token, navigate]); // Re-run effect when token changes
 
   if (loading) {
-    return <div>Loading...</div>; // Optionally add a loading indicator
+    return <div>Loading...</div>;
   }
 
-  return ok ? <Outlet /> : null; // Render child routes if ok, else nothing
+  return ok ? <Outlet/> : null; 
 }

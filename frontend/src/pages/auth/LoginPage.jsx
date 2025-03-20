@@ -4,7 +4,7 @@ import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext"; 
-import { validateEmail, validatePassword } from "../../utils/Validation";
+import { validateEmail, validatePassword } from "../../utils/validation";
 import PasswordFieldComponent from "../../components/PasswordFieldComponent";
 import { toast, ToastContainer } from "react-toastify";
 import { Circles } from 'react-loading-icons';

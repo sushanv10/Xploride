@@ -3,7 +3,7 @@ const User = require("../models/authModel");
 function authorizeRole(role) {
     return async (req, res, next) => {
         try {
-            // Ensure req.user exists
+            
             if (!req.user || req.user.userId === undefined) {
                 return res.status(401).json({ message: "User not authenticated" });
             }

@@ -1,4 +1,4 @@
-const db = require('../config/db'); // ✅ Import correctly
+const db = require('../config/db'); 
 
 
 exports.createUser = async (userName, email, password, address, contact, role) => {
@@ -24,7 +24,7 @@ exports.findUserByEmail = async (email) => {
 };
 
 exports.findUserById = async (userId) => {
-    if (userId === undefined || userId === null) {  // ✅ Fix: Allow userId = 0
+    if (userId === undefined || userId === null) { 
         throw new Error("User ID is undefined or null");
     }
 

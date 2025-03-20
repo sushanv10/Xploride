@@ -6,6 +6,9 @@ import RegisterPage from './pages/auth/RegisterPage'
 import UserDahboard from './dashboard/user-dashboard/UserDahboard'
 import AdminRoute from './route/AdminRoute'
 import AdminDashboard from './dashboard/admin-dashboard/pages/AdminDashboard'
+import AboutPage from './pages/about/AboutPage'
+import ProtectedRoute from './route/ProtectedRoute'
+
 
 const App = () => {
   return (
@@ -16,12 +19,22 @@ const App = () => {
         <Route path='/' element={<HomePage/>}/>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/register' element={<RegisterPage/>}/> 
-        <Route path='/profile' element={<UserDahboard/>}/> 
+        <Route path='/about' element={<AboutPage/>}/> 
 
+        {/* ProtectedRoute */}
+        <Route path='/' element={<ProtectedRoute/>}>
+          <Route path='/profile' element={<UserDahboard/>}/> 
+        
+        
+        
+        </Route>
+
+
+        {/* Admin Route */}
         <Route path='/admin' element={<AdminRoute/>}>
           <Route path='dashboard' element={<AdminDashboard/>}/>
         </Route>
-        
+
       </Routes>
     </Router>
    

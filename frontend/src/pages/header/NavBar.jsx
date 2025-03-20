@@ -60,6 +60,7 @@ const NavBar = () => {
   return (
     <>
       <nav className={`bg-black h-18 w-full fixed z-50 
+      
         ${window.innerWidth >= 1024 ? 'lg:transition-transform lg:duration-500' : ''}
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between p-4 items-center w-full">

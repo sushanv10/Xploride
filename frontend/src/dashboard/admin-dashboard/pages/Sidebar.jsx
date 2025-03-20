@@ -15,17 +15,17 @@ import Cookies from 'js-cookie';
 const Sidebar = () => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [productDropdown, setProductDropdown] = useState(true);
-  const [bikeDropDown, setBikedropdown] = useState(true);
+  const [bikeDropDown, setBikeDropdown] = useState(true);
   const [auth, setAuth]= useAuth();
   const navigate= useNavigate();
 
-  const toggleProductDropdown = () => {
-    setProductDropdown(!productDropdown);
-  }
-
-  const toggleBikeDropDown = () => {
-    setBikedropdown(!bikeDropDown);
-  }
+   const toggleDropdown = (type) => {
+    if (type === "products") {
+      setProductDropdown(!productDropdown);
+    } else if (type === "bikes") {
+      setBikeDropdown(!bikeDropDown);
+    }
+  };
 
   const toggleSideBar = () => {
     setShowSideBar(!showSideBar);
@@ -33,8 +33,6 @@ const Sidebar = () => {
 
  const handleLogout = async () => {
   try {
-    // Show success toast before logging out
-    
     // Make the logout request
     await axiosInstance.post("auth/logout", {}, { withCredentials: true });
     
@@ -46,7 +44,6 @@ const Sidebar = () => {
     localStorage.removeItem("userData");
     
     toast.success("Logged out successfully!");
-
     setTimeout(() => {
       navigate("/login");
     }, 2000); 
@@ -102,7 +99,7 @@ const Sidebar = () => {
                 <div className="flex relative text-center">
                   <MdOutlineProductionQuantityLimits className="h-6 w-6" />
                   <span className="pl-3">Products</span>
-                  <span className="mx-18" onClick={toggleProductDropdown}>
+                  <span className="mx-18"  onClick={() => toggleDropdown("products")}>
                     {productDropdown ?  <IoIosArrowUp className="h-5 w-5 " /> : <IoIosArrowDown className="h-5 w-5 " /> }
                   </span>
                 </div>
@@ -143,7 +140,7 @@ const Sidebar = () => {
                 <div className="flex relative text-center">
                   <MdDirectionsBike  className="h-6 w-6" />
                   <span className="pl-3">Bikes</span>
-                  <span className="mx-25" onClick={toggleBikeDropDown}>
+                  <span className="mx-25"  onClick={() => toggleDropdown("bikes")}>
                    {bikeDropDown ?  <IoIosArrowUp className="h-5 w-5"/> :  <IoIosArrowDown className="h-5 w-5"/>}
                   </span>
                 </div>
