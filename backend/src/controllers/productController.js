@@ -11,10 +11,10 @@ exports.createProduct = async (req, res) => {
                 return res.status(400).json({message: err.message});
             }
     
-            const { productName, productPrice, productDescription, productType, category, countInStock}= req.body
+            const { productName, productPrice, productDescription, productType, countInStock, categoryId}= req.body
     
             // Validate Fields
-            if(!productName || !productPrice || !productDescription || !productType || !category || !countInStock){
+            if(!productName || !productPrice || !productDescription || !productType || !countInStock || !categoryId){
                 return res.status(400).json({message: "All fields are required"});
             }
     
@@ -28,8 +28,8 @@ exports.createProduct = async (req, res) => {
                 productDescription,
                 cloudinaryUrl,
                 productType,
-                category,
-                countInStock
+                countInStock,
+                categoryId
             );
     
             // Response success message
@@ -42,8 +42,8 @@ exports.createProduct = async (req, res) => {
                     productDescription,
                     productImage: cloudinaryUrl,
                     productType,
-                    category,
                     countInStock,
+                    categoryId,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 }
@@ -61,10 +61,10 @@ exports.createProduct = async (req, res) => {
 exports.updateProduct = async (req, res ) => {
     try {
         const productId = req.params.id ;
-        const {productName, productPrice, productDescription, productType, category, countInStock} = req.body ;
+        const {productName, productPrice, productDescription, productType,  countInStock, categoryId} = req.body ;
 
         // Validate input fields
-        if (!productName || !productPrice || !productDescription || !productType || !category || !countInStock) {
+        if (!productName || !productPrice || !productDescription || !productType || !countInStock || !categoryId) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -73,8 +73,8 @@ exports.updateProduct = async (req, res ) => {
             productPrice,
             productDescription,
             productType,
-            category,
-            countInStock
+            countInStock,
+            categoryId
         }
 
         // Check if an image was uploaded

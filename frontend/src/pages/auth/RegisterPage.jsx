@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import { MdEmail, MdPermContactCalendar } from "react-icons/md";
+import { Circles } from 'react-loading-icons';
 import PasswordFieldComponent from "../../components/PasswordFieldComponent";
 import { FaLocationDot, FaUser } from "react-icons/fa6";
 import { validateForm } from "../../utils/validation";
@@ -11,6 +12,7 @@ import axiosInstance from "../../config/AxiosConfig";
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     userName: "",
     email: "",
@@ -37,6 +39,7 @@ const handleSubmit = async (e) => {
   const validationErrors = validateForm(userData);
   setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
+      setLoading(true);
       try {
         const response = await axiosInstance.post(
           "auth/register", userData
@@ -50,7 +53,8 @@ const handleSubmit = async (e) => {
       } catch (error) {
         console.log("Error:",error.response?.data?.msg || error.message);
         toast.error(error.response?.data?.msg || "Registration failed");
-        
+    } finally {
+      setLoading(false);
     }
   }
 };
@@ -75,6 +79,7 @@ const handleSubmit = async (e) => {
                 name="userName"
                 value={userData.userName}
                 onChange={handleChange}
+                className={'h-10 w-68 sm:h-11 lg:w-85 pl-10'}
                 
               />
             </span>
@@ -91,6 +96,7 @@ const handleSubmit = async (e) => {
                 name="email"
                 value={userData.email}
                 onChange={handleChange}
+                className={'h-10 w-68  sm:h-11 sm:text-[15px] lg:w-85 pl-10'}
                
               />
             </span>
@@ -107,7 +113,7 @@ const handleSubmit = async (e) => {
                 name="contact"
                 value={userData.contact}
                 onChange={handleChange}
-               
+                className={'h-10 w-68  sm:h-11 sm:text-[15px] lg:w-85 pl-10'}
               />
             </span>
             {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
@@ -123,6 +129,7 @@ const handleSubmit = async (e) => {
                 name="address"
                 value={userData.address}
                 onChange={handleChange}
+                className={'h-10 w-68  sm:h-11 sm:text-[15px] lg:w-85 pl-10'}
                 
               />
             </span>
@@ -156,7 +163,11 @@ const handleSubmit = async (e) => {
 
          {/* Button */}
         <div className="flex justify-center items-center mt-6">
-          <ButtonComponent text="Register" type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" />
+          <ButtonComponent
+                text={loading ? <Circles className="relative h-5 w-5 left-26 lg:left-32" /> : "Register"}
+                type="submit"
+                className="w-70 lg:w-80"
+              />
         </div>
 
         {/* Registration Link */}

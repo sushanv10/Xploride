@@ -33,6 +33,11 @@ export const validateAddress = (address) => {
     return null;
 };
 
+export const validateCategoryNameField = (CategoryNameField) => {
+    if (!CategoryNameField?.trim()) return "Category Name is required";
+    return null;
+}
+
 export const validateForm = (formData) => {
     const errors = {};
 
@@ -56,6 +61,9 @@ export const validateForm = (formData) => {
 
     const addressError = validateAddress(formData.address);
     if (addressError) errors.address = addressError;
+
+    const CategoryNameFieldError = validateCategoryNameField (formData.CategoryNameField);
+    if(CategoryNameFieldError) errors.CategoryNameField = CategoryNameFieldError;
 
     return errors;
 };

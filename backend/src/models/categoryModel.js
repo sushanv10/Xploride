@@ -46,7 +46,7 @@ exports.updateCategoryById = async (categoryId, updateCategory) => {
 
     try {
         const [result] = await db.execute(
-            "UPDATE category SET categoryName = ?, , updated_at = CURRENT_TIMESTAMP WHERE categoryId = ?",
+            "UPDATE category SET categoryName = ?, updated_at = CURRENT_TIMESTAMP WHERE categoryId = ?",
             [categoryName, categoryId]
         );
         console.log("Update Result:", result);
@@ -57,7 +57,7 @@ exports.updateCategoryById = async (categoryId, updateCategory) => {
     }    
 };
 
-exports.deleteCategoryById = async (categoryId) => {
+exports.deleteCategoryFromDb = async (categoryId) => {
     if(categoryId === undefined || categoryId === null){
         throw new error ("Category Id is undefined or null");
     }

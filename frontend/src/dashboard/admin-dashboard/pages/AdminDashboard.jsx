@@ -1,35 +1,48 @@
 import { useState } from "react";
 import HeaderComponent from "./Header";
 import Sidebar from "./Sidebar";
+import Main from "./Main";
+import AdminProfile from "./AdminProfile";
+import Settings from "./Settings";
+import CategoryLists from "./category/CategoryLists";
+import ProductLists from "./products/ProductLists";
+import BikeLists from "./bikes/BikeLists";
+import TourLists from "./tours/TourLists";
+
+
 
 const AdminDashboard = () => {
-  const [activeComponent, setActiveComponent] = useState("Dashboard");
+  const [activePage, setActivePage] = useState('Dashboard');
 
   const renderActiveComponent = () => {
-    switch (activeComponent) {
-      case "Dashboard":
-        return <div className="text-white text-center">Dashboard</div>;
-      case "ProductLists":
-        return <div className="text-white text-center">Product Lists</div>;
-      case "AddProducts":
-        return <div className="text-white text-center">Add Products</div>;
-      case "BikeLists":
-        return <div className="text-white text-center">Bike Lists</div>;
-      case "AddBikes":
-        return <div className="text-white text-center">Add Bikes</div>;
-      default:
-        return <div className="text-white text-center">Dashboard</div>;
-    }
+   switch (activePage) {
+    case 'Dashboard':
+      return <Main/>;
+    case 'Profile':
+      return <AdminProfile/>;
+    case 'CategoryLists':
+      return <CategoryLists/>;
+    case 'ProductLists':
+      return <ProductLists/>;
+    case 'BikeLists':
+      return <BikeLists/>;
+    case 'TourLists':
+      return <TourLists/>;
+    case 'Settings':
+      return <Settings/>;
+    default : 
+    return <Main/>;
+   }
   };
 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Sidebar setActiveComponent={setActiveComponent} />
+      <Sidebar setActiveIndex={setActivePage} />
 
       {/* Main Content */}
       <div className="flex flex-col flex-grow">
-        <HeaderComponent />
+        <HeaderComponent setActiveIndex={setActivePage} />
         <div className="flex-grow mt-20 p-5">{renderActiveComponent()}</div>
       </div>
     </div>

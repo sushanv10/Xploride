@@ -3,12 +3,11 @@ import NavBar from './pages/header/NavBar'
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
-import UserDahboard from './dashboard/user-dashboard/UserDahboard'
+import UserDashboard from './dashboard/user-dashboard/UserDashboard'
 import AdminRoute from './route/AdminRoute'
 import AdminDashboard from './dashboard/admin-dashboard/pages/AdminDashboard'
 import AboutPage from './pages/about/AboutPage'
 import ProtectedRoute from './route/ProtectedRoute'
-
 
 const App = () => {
   return (
@@ -23,18 +22,13 @@ const App = () => {
 
         {/* ProtectedRoute */}
         <Route path='/' element={<ProtectedRoute/>}>
-          <Route path='/profile' element={<UserDahboard/>}/> 
-        
-        
-        
+          <Route path='/user-dashboard' element={<UserDashboard/>}/> 
         </Route>
-
 
         {/* Admin Route */}
         <Route path='/admin' element={<AdminRoute/>}>
           <Route path='dashboard' element={<AdminDashboard/>}/>
         </Route>
-
       </Routes>
     </Router>
    

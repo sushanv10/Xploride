@@ -24,8 +24,8 @@ const filter = (req, file, next) => {
   }
 };
 
-// Function to handle file naming before uploading
-const filename = (req, file, next) => {
+
+const filename = (_, file, next) => {
   const ext = file.originalname.substring(file.originalname.lastIndexOf("."));
   const sanitizedFileName = `${sanitizeFileName(file.originalname.split('.')[0])}-${uuidv4()}${ext}`;
   next(null, sanitizedFileName);
@@ -51,7 +51,7 @@ const uploadToCloudinary = async (req, res, next) => {
     // Upload file to Cloudinary using the buffer from memory storage
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: 'xploride/images',  // Optional: define Cloudinary folder
+        folder: 'xploride/images', 
         public_id: req.file.filename,  // Assign a unique name for the image
         resource_type: 'auto',  // Automatically detect the file type (image, video, etc.)
       },

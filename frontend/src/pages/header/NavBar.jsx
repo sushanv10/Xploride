@@ -47,7 +47,7 @@ const NavBar = () => {
 
   const handleProfileClick = () => {
     if(auth.user){
-      navigate('/profile');
+      navigate('/user-dashboard');
     } else{
       navigate('/login');
     }
@@ -55,8 +55,8 @@ const NavBar = () => {
 
   if(auth.user?.role === 'admin'){
     return null;
-  } else {
-    
+  } 
+
   return (
     <>
       <nav className={`bg-black h-18 w-full fixed z-50 
@@ -136,6 +136,5 @@ const NavBar = () => {
     </>
   );
  };
-}
-
+ 
 export default NavBar;

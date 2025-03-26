@@ -77,10 +77,11 @@ const LoginPage = () => {
       setTimeout(() => {
         if(data.role == 'admin'){
           navigate('/admin/dashboard')
+          
         } else{
-            navigate("/"); 
+          navigate("/"); 
         }
-      }, 1000);
+      }, 1500);
     } catch (error) {
       console.error(error.response?.data?.message || error.message);
       toast.error(error.response?.data?.message || "Login failed");
@@ -107,6 +108,7 @@ const LoginPage = () => {
                 name="email"
                 value={userData.email}
                 onChange={handleChange}
+                className={'h-10 w-68  sm:h-11 sm:text-[15px] lg:w-85 pl-10'}
               />
               {/* Email Validation error message */}
               {errors.email && (
@@ -123,6 +125,7 @@ const LoginPage = () => {
                 name="password"
                 value={userData.password}
                 onChange={handleChange}
+      
               />
             </div>
 

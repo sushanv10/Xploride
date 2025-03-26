@@ -23,6 +23,7 @@ const PasswordFieldComponent = ({ placeholder, name, value, onChange }) => {
           name={name}
           value={value}
           onChange={onChange}
+          className={'h-10 w-68  sm:h-11 lg:w-85 pl-10'}
          
         />
 

@@ -1,11 +1,11 @@
 const db = require('../config/db');
 
 // Create product
-exports.createProduct = async (productName, productPrice, productDescription, productImage, productType, category, countInStock) => {
+exports.createProduct = async (productName, productPrice, productDescription, productImage, productType, countInStock, categoryId) => {
     try {
         const [result] = await db.execute(
-            "INSERT INTO products (productName, productPrice, productDescription, productImage, productType, category,countInStock) VALUES(?,?,?,?,?,?,?)",
-            [productName, productPrice, productDescription, productImage, productType, category, countInStock]
+            "INSERT INTO products (productName, productPrice, productDescription, productImage, productType, countInStock, categoryId) VALUES(?,?,?,?,?,?,?)",
+            [productName, productPrice, productDescription, productImage, productType, countInStock, categoryId]
         );
 
         console.log("Insert Result:", result);
@@ -19,7 +19,7 @@ exports.createProduct = async (productName, productPrice, productDescription, pr
 // Find Product By Id
 exports.findProductById = async (productId) => {
     // Fetch product by ID from the database
-    const product = await db.query("SELECT * FROM products WHERE productId = ?", [productId]);
+    const product = await db.query("SELECT * FROM products WHERE productId = ? limit 10", [productId]);
     return product[0];  
 };
 
@@ -34,14 +34,14 @@ exports.updateProductById = async (productId, updateProduct) => {
         productDescription,
         productImage,
         productType,
-        category,
-        countInStock
+        countInStock,
+        categoryId
     } = updateProduct
 
     try {
         const [result] = await db.execute(
-            "UPDATE products SET productName = ?, productPrice = ?, productDescription = ?, productImage = ?, productType = ?, category = ?, countInStock = ? , updated_at = CURRENT_TIMESTAMP WHERE productId = ?",
-            [productName, productPrice, productDescription, productImage, productType, category, countInStock, productId]
+            "UPDATE products SET productName = ?, productPrice = ?, productDescription = ?, productImage = ?, productType = ?, countInStock = ? , updated_at = CURRENT_TIMESTAMP WHERE productId = ?",
+            [productName, productPrice, productDescription, productImage, productType, countInStock, categoryId, productId]
         );
 
         console.log("Update Result:", result);

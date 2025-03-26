@@ -4,7 +4,7 @@ const db = require("./src/config/db");
 
 async function runMigration() {
     try {
-        const files = ["create_category_table.sql"];
+        const files = ["create_products_table.sql"];
 
         for (const file of files) {
             const migrationFilePath = path.join(__dirname, "migrations", file);

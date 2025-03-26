@@ -60,7 +60,7 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Remove password field from the user object
+        
         const { password: _, ...userWithoutPassword } = user;
 
         const { accessToken, refreshToken } = generateTokens(user);

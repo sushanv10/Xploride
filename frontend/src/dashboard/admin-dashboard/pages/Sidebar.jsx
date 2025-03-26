@@ -1,196 +1,110 @@
-import { MdDashboard, MdDirectionsBike, MdOutlineProductionQuantityLimits, MdOutlineTour } from "react-icons/md";
-import { CiViewList } from "react-icons/ci";
-import { IoAdd, IoBagAddSharp, IoCloseSharp } from "react-icons/io5";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { MdDashboard, MdDirectionsBike, MdOutlineTour } from "react-icons/md";
+import { LuShoppingCart } from "react-icons/lu";
+import { BiCategory } from "react-icons/bi";
+import { IoCloseSharp, IoSettingsOutline } from "react-icons/io5";
+import { FaRegUser } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import LogoComponent from "../../../components/LogoComponent";
-import ButtonComponent from "../../../components/ButtonComponent";
-import axiosInstance from "../../../config/AxiosConfig";
-import { useAuth } from "../../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import Cookies from 'js-cookie';
 
-const Sidebar = () => {
+const Sidebar = ({ setActiveIndex }) => {
   const [showSideBar, setShowSideBar] = useState(false);
-  const [productDropdown, setProductDropdown] = useState(true);
-  const [bikeDropDown, setBikeDropdown] = useState(true);
-  const [auth, setAuth]= useAuth();
-  const navigate= useNavigate();
-
-   const toggleDropdown = (type) => {
-    if (type === "products") {
-      setProductDropdown(!productDropdown);
-    } else if (type === "bikes") {
-      setBikeDropdown(!bikeDropDown);
-    }
-  };
-
+ 
   const toggleSideBar = () => {
     setShowSideBar(!showSideBar);
   };
 
- const handleLogout = async () => {
-  try {
-    // Make the logout request
-    await axiosInstance.post("auth/logout", {}, { withCredentials: true });
-    
-    // Clear authentication state
-    setAuth({ userData: null, token: "" });
-    
-    // Remove auth data from cookies and local storage
-    Cookies.remove("accessToken");
-    localStorage.removeItem("userData");
-    
-    toast.success("Logged out successfully!");
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000); 
-  } catch (error) {
-    console.log(error);
-    toast.error("Logout failed. Please try again.");
-  }
-  };
-
   return (
     <>
-    <ToastContainer/>
-    <div className="relative">
-      {/* Hamburger Menu */}
-      <div
-        className="absolute top-6 left-4 text-white text-2xl cursor-pointer z-50"
-        onClick={toggleSideBar}
-      >
-        {showSideBar ? <IoCloseSharp /> : <RxHamburgerMenu className="text-white" />}
-      </div>
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#0C0C0C] text-gray-300 text-sm shadow-lg transition-transform duration-300 ${
-          showSideBar ? "translate-x-0" : "-translate-x-64"
-        }`}
-      >
-        {/* Brand Logo */}
-        <div className="flex items-center justify-center py-5 border-b border-gray-700">
-          <LogoComponent className={''}/>
+      <div className="relative">
+        {/* Hamburger Menu */}
+        <div
+          className="absolute top-7 left-4 text-white text-2xl cursor-pointer z-150"
+          onClick={toggleSideBar}
+        >
+          {showSideBar ? <IoCloseSharp /> : <RxHamburgerMenu className="text-white" />}
         </div>
 
-        {/* Navigation */}
-        <nav className="p-4">
-          <ul className="space-y-2">
-            {/* Dashboard */}
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <MdDashboard className="h-6 w-6" />
-                <span className="pl-3">Dashboard</span>
-              </a>
-            </li>
+        {/* Sidebar */}
+        <aside
+          className={`fixed top-0 left-0 h-full w-64 z-100 bg-gradient-to-b from-[#0A0A0A] to-[#1F1F1F] text-gray-300 text-sm shadow-lg transition-transform duration-500 transform ${
+            showSideBar ? "translate-x-0" : "-translate-x-64"
+          }`}
+        >
+          {/* Brand Logo */}
+          <div className="flex items-center justify-center py-6 border-b border-gray-700">
+            <LogoComponent className={""} />
+          </div>
 
-            {/* Products */}
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <div className="flex relative text-center">
-                  <MdOutlineProductionQuantityLimits className="h-6 w-6" />
-                  <span className="pl-3">Products</span>
-                  <span className="mx-18"  onClick={() => toggleDropdown("products")}>
-                    {productDropdown ?  <IoIosArrowUp className="h-5 w-5 " /> : <IoIosArrowDown className="h-5 w-5 " /> }
-                  </span>
+          {/* Navigation */}
+          <nav className="p-4">
+            <ul className="space-y-2">
+              <li onClick={() => setActiveIndex("Dashboard")} className="cursor-pointer">
+                <div className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md">
+                  <MdDashboard className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Dashboard</span>
                 </div>
-              </a>
-
-              {productDropdown && 
-              <div> 
-                  {/* Products Lists */}
-                  <li>
-                  <a
-                    href="#"
-                    className="flex items-center px-10 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-                  >
-                    <CiViewList className="h-6 w-6" />
-                    <span className="pl-3">Product Lists</span>
-                  </a>
-                </li>
-
-                {/* Add Product */}
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center px-10 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-                  >
-                    <IoBagAddSharp className="h-6 w-6" />
-                    <span className="pl-3">Add Products</span>
-                  </a>
-                </li>
-              </div>}
-            </li>
-
-             {/* Bike Lists */}
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <div className="flex relative text-center">
-                  <MdDirectionsBike  className="h-6 w-6" />
-                  <span className="pl-3">Bikes</span>
-                  <span className="mx-25"  onClick={() => toggleDropdown("bikes")}>
-                   {bikeDropDown ?  <IoIosArrowUp className="h-5 w-5"/> :  <IoIosArrowDown className="h-5 w-5"/>}
-                  </span>
-                </div>
-              </a>
-
-               {bikeDropDown && 
-               <div>
-                 <li>
-                  <a
-                    href="#"
-                    className="flex items-center px-10 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-                  >
-                    <CiViewList  className="h-6 w-6" />
-                    <span className="pl-3">Bike Lists</span>
-                  </a>
-                </li>
-
-                <li>
-                <a
-                  href="#"
-                  className="flex items-center px-10 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-                >
-                  <IoAdd   className="h-6 w-6" />
-                  <span className="pl-3">Add Bike</span>
-                </a>
               </li>
-              
-              </div>}
-            </li>
 
-            <li>
-              <a
-                href="#"
-                className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-gray-700 hover:text-white rounded-md"
-              >
-                <MdOutlineTour className="h-6 w-6" />
-                <span className="pl-3">Add Tours</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-       
-        <div className='relative flex left-10'>
-          <ButtonComponent text={'Logout'} onClick={handleLogout} />
-        </div>
+              <li onClick={() => setActiveIndex("Profile")} className="cursor-pointer">
+                <div className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md">
+                  <FaRegUser className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Profile</span>
+                </div>
+              </li>
 
-      </aside>
-    </div>
+              <li onClick={() => setActiveIndex("CategoryLists")} className="cursor-pointer">
+                <div className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md">
+                  <BiCategory className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Category</span>
+                </div>
+              </li>
+
+              {/* Products */}
+              <li onClick={() => setActiveIndex("ProductLists")} className="cursor-pointer">
+                <div
+                  className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md cursor-pointer"
+                >
+                  <LuShoppingCart className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Products</span>
+                </div>
+              </li>
+
+              {/* Bikes */}
+              <li onClick={() => setActiveIndex("BikeLists")}>
+                <div
+                  className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md cursor-pointer"
+                >
+                  <MdDirectionsBike className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Bikes</span>
+                </div>
+              </li>
+
+               {/* Tour*/}
+              <li onClick={() => setActiveIndex("TourLists")} className="cursor-pointer">
+                <div
+                  className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md cursor-pointer"
+                >
+                  <MdOutlineTour className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Tour</span>
+                </div>
+              </li>
+
+              <li onClick={() => setActiveIndex("Settings")} className="cursor-pointer">
+                <div className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md">
+                  <IoSettingsOutline className="h-6 w-6 text-gray-500" />
+                  <span className="pl-3">Settings</span>
+                </div>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+      </div>
     </>
   );
 };
 
 export default Sidebar;
+
+
+

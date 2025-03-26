@@ -1,4 +1,4 @@
-const {addCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../models/categoryModel');
+const {addCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryFromDb } = require('../models/categoryModel');
 
 exports.addCategory = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ exports.addCategory = async (req, res) => {
             return res.status(400).json({message: "All fields are required"});
         }
 
-        const result = addCategory(
+        const result = await addCategory(
             categoryName
         );
 
@@ -93,6 +93,27 @@ exports.updateCategoryById = async (req, res) => {
     }
 };
 
-exports.deleteCategoryById = async (req, res) => {
 
-}
+// Express route handler for deleting category
+exports.deleteCategoryById = async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+
+        // Ensure categoryId is not undefined or null
+        if (!categoryId) {
+            return res.status(400).json({ message: "Invalid category ID" });
+        }
+
+        const result = await deleteCategoryFromDb(categoryId);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+
+        return res.status(200).json({ message: "Category deleted successfully" });
+
+    } catch (error) {
+        console.error("Error deleting category:", error);
+        return res.status(500).json({ message: "Server Error" });
+    }
+};
