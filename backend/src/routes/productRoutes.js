@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/create', authMiddleware, authorizeRole('admin'), cloudinaryUpload, uploadToCloudinary, createProduct);
 
 // Route to update a product by ID
-router.put('/update/:id', authMiddleware, authorizeRole('admin'), cloudinaryUpload, uploadToCloudinary, updateProduct);
+router.patch('/update/:id', authMiddleware, authorizeRole('admin'), cloudinaryUpload, uploadToCloudinary, updateProduct);
 
 // Route to get a product by ID
 router.get('/:id', getProductById);

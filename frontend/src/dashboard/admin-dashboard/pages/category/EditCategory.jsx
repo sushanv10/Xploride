@@ -3,7 +3,7 @@ import InputComponent from "../../../../components/InputComponent";
 import ButtonComponent from "../../../../components/ButtonComponent";
 import axiosInstance from "../../../../config/AxiosConfig";
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function EditCategory({ closeEditCategory, categoryId, categoryName }) {
   // Initialize category state with the existing name
@@ -33,7 +33,10 @@ function EditCategory({ closeEditCategory, categoryId, categoryName }) {
       });
       console.log(res.data.message);
       toast.success(res.data.message);
-      closeEditCategory(); // Close modal 
+      setTimeout(() => {
+        closeEditCategory(); // Close modal 
+
+      })
     } catch (error) {
       console.error("Error updating category:", error);
       toast.error(error.response?.data?.message || "Error updating category");
@@ -41,6 +44,9 @@ function EditCategory({ closeEditCategory, categoryId, categoryName }) {
   };
 
   return (
+    <>
+    
+    <ToastContainer/>
     <div className="flex justify-center items-center">
       <div className="bg-white h-[25rem] w-[25rem] -mt-180 z-200 rounded-2xl">
         <div className="flex justify-between p-4">
@@ -64,6 +70,7 @@ function EditCategory({ closeEditCategory, categoryId, categoryName }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

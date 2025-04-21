@@ -11,9 +11,10 @@ import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-const HeaderComponent = ({setActiveIndex}) => {
+const HeaderComponent = ({ setActiveIndex }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [showProfileContainer, setShowProfileContainer] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
 
@@ -25,104 +26,113 @@ const HeaderComponent = ({setActiveIndex}) => {
     setShowProfileContainer(!showProfileContainer);
   };
 
- 
   const handleLogout = async () => {
-  try {
-    await axiosInstance.post("auth/logout", {}, { withCredentials: true });
+    try {
+      setIsLoggingOut(true);
+      const res = await axiosInstance.post("auth/logout", {}, { withCredentials: true });
 
-    const showtoast= toast.success("Logged out successfully!");
-    console.log("toast shown:", showtoast);
-
-    setTimeout(() => {
-      setAuth({ userData: null, token: "" });
-      Cookies.remove("accessToken");
-      localStorage.removeItem("userData");
-      navigate("/login");
-    }, 1500); 
-
-  } catch (error) {
-    console.log(error);
-    toast.error("Logout failed. Please try again.");
-  }
-};
+      toast.success(res.data.message);
+      setTimeout(() => {
+        setAuth({ user: null, token: "" });
+        Cookies.remove("accessToken");
+        localStorage.removeItem("userData");
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      toast.error("Logout failed. Please try again.");
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <>
-    <ToastContainer />
-    <header className="bg-[#0C0C0C] text-gray-400 shadow-md h-19 w-full">
-      <div className="container mx-auto px-4 py-5 flex items-center justify-between">
-        {/* Left Section */}
-        <div className="flex items-center ml-2">
-          <LogoComponent />
-        </div>
+      <ToastContainer />
+      <header className="bg-[#0C0C0C] text-gray-400 shadow-md w-full">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center ml-10">
+            <LogoComponent />
+          </div>
 
-        {/* Right Section */}
-        <div className="flex items-center space-x-4">
-          {/* Search Input & Toggle */}
-          <div className="relative">
-            {showSearch ? (
-              <div className="flex items-center border border-gray-300 rounded-md px-2 py-1">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="outline-none px-2 text-gray-700"
-                  autoFocus
-                />
-                <IoCloseSharp
-                  className="text-xl text-gray-500 cursor-pointer hover:text-gray-700"
+          {/* Right Section */}
+          <div className="flex items-center space-x-6">
+            {/* Search */}
+            <div className="relative">
+              {showSearch ? (
+                <div className="flex items-center border border-gray-300 rounded-md px-2 py-1 bg-white">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="outline-none px-2 text-gray-700 bg-transparent"
+                    autoFocus
+                  />
+                  <IoCloseSharp
+                    className="text-xl text-gray-500 cursor-pointer hover:text-gray-700"
+                    onClick={toggleSearch}
+                  />
+                </div>
+              ) : (
+                <CiSearch
+                  className="text-xl text-white cursor-pointer hover:text-gray-300"
                   onClick={toggleSearch}
                 />
-              </div>
-            ) : (
-              <CiSearch
-                className="text-xl text-gray-500 cursor-pointer hover:text-gray-700"
-                onClick={toggleSearch}
-              />
-            )}
-          </div>
-
-          {/* User Profile */}
-          <div className="relative">
-            <button
-              className="flex items-center space-x-2 cursor-pointer"
-              onClick={toggleProfileContainer}
-            >
-              <img
-                src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
-                alt="User"
-                className="w-8 h-8 rounded-full shadow"
-              />
-              <span className="text-white">{auth?.user?.userName || "Admin"}</span>
-            </button>
-
-            {/* Profile container */}
-            <AnimatePresence>
-              {showProfileContainer && (
-                <motion.div
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  exit={{ opacity: 0, scaleY: 0 }}
-                  transition={{ duration: 0.7, ease: "easeInOut" }}
-                  className="bg-white w-40 absolute top-12 right-0 rounded-2xl z-100 shadow-lg p-4 origin-top"
-                >
-                  <div className="flex flex-col space-y-4">
-                    <li onClick={() => setActiveIndex("Profile")} className="flex items-center gap-4 cursor-pointer">
-                      <FaRegUser className="text-[20px] text-gray-500" />
-                      <button className="cursor-pointer text-black">Profile</button>
-                    </li>
-
-                    <div className="flex items-center gap-4 cursor-pointer" onClick={handleLogout}>
-                      <IoIosLogOut className="text-[20px] cursor-pointer text-gray-500" />
-                      <button className="cursor-pointer text-black">Logout</button>
-                    </div>
-                  </div>
-                </motion.div>
               )}
-            </AnimatePresence>
+            </div>
+
+            {/* User Profile */}
+            <div className="relative">
+              <button
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={toggleProfileContainer}
+              >
+                <img
+                  src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                  alt="User"
+                  className="w-9 h-9 rounded-full object-cover shadow"
+                />
+                <span className="text-white font-medium">{auth?.user?.userName ?? "Admin"}</span>
+              </button>
+
+              {/* Dropdown */}
+              <AnimatePresence>
+                {showProfileContainer && (
+                  <motion.div
+                    initial={{ opacity: 0, scaleY: 0 }}
+                    animate={{ opacity: 1, scaleY: 1 }}
+                    exit={{ opacity: 0, scaleY: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="bg-white w-44 absolute top-12 right-0 rounded-xl z-50 shadow-lg p-4 origin-top"
+                  >
+                    <div className="flex flex-col space-y-4">
+                      <div
+                        onClick={() => {
+                          setActiveIndex("Profile");
+                          setShowProfileContainer(false);
+                        }}
+                        className="flex items-center gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+                      >
+                        <FaRegUser className="text-xl text-gray-600" />
+                        <span className="text-black">Profile</span>
+                      </div>
+
+                      <div
+                        onClick={handleLogout}
+                        className={`flex items-center gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md ${
+                          isLoggingOut ? "opacity-50 pointer-events-none" : ""
+                        }`}
+                      >
+                        <IoIosLogOut className="text-xl text-gray-600" />
+                        <span className="text-black">Logout</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
     </>
   );
 };

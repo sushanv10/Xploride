@@ -8,6 +8,8 @@ import Search from "../Search";
 import LogoComponent from "../../components/LogoComponent";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
+import { useCart } from "../../context/CartContext";
+import { RiShoppingCartLine } from "react-icons/ri";
 
 
 const NavBar = () => {
@@ -15,6 +17,7 @@ const NavBar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const [showSearch, setShowSearch] = useState(false);
+  const [cart] = useCart();
   const [auth] = useAuth();
   const navigate= useNavigate();
 
@@ -59,10 +62,13 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className={`bg-black h-18 w-full fixed z-50 
-      
-        ${window.innerWidth >= 1024 ? 'lg:transition-transform lg:duration-500' : ''}
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+     <nav
+          className={`fixed top-0 left-0 w-full z-50 
+            ${window.innerWidth >= 1024 ? 'lg:transition-transform lg:duration-500' : ''}
+            ${isVisible ? 'translate-y-0' : '-translate-y-full'}
+            bg-black/10 backdrop-blur-sm`}
+        >
+
         <div className="flex justify-between p-4 items-center w-full">
           {/* Logo */}
           <div className="flex items-center cursor-pointer ml-2">
@@ -102,10 +108,14 @@ const NavBar = () => {
             }
            
             <div className="relative">
-              <GiShoppingBag className="text-[24px] text-blue-400" />
-              <div className="absolute bg-red-500 rounded-full w-4 flex justify-center -top-2 -right-2">
-                <span className="text-sm text-white font-bold">0</span>
-              </div>
+              <Link to='/cart'>
+              <RiShoppingCartLine className='text-2xl text-white' />
+              {cart?.length > 0 && (
+                <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  {cart.length}
+                </span>
+              )}
+              </Link>
             </div>
             {/* Profile */}
             <button className="cursor-pointer flex" onClick={handleProfileClick}>

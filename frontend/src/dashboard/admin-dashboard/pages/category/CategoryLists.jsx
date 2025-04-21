@@ -21,7 +21,7 @@ const CategoryLists = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axiosInstance.get("category/");
+      const res = await axiosInstance.get("/category/");
       console.log("Fetched categories:", res.data.category);
 
       // Format data
@@ -38,24 +38,18 @@ const CategoryLists = () => {
     }
   };
 
-  const handleDelete = async id => {
-    console.log("Deleting category with ID:", id);
-
-    if (!id) {
-      console.error("Invalid category ID:", id);
-      toast.error("Invalid category ID");
-      return;
-    }
-
+  const handleDelete = async (id) => {
+  
     try {
       const res = await axiosInstance.delete(`category/${id}`);
       toast.success(res.data.message);
-      fetchCategories();
+      fetchCategories(); 
     } catch (error) {
-      console.error("Error deleting category:", error.response?.data || error.message);
-      toast.error("Error deleting category");
+      toast.error(error.response?.data?.message || "Error deleting category");
     }
   };
+
+
 
   const handleEdit = (categoryId, name) => {
     setShowEditCategory(true);

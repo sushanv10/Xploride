@@ -7,6 +7,7 @@ import FeaturedProductSection from "./sections/FeaturedProductSection"
 import HeroSection from "./sections/HeroSection"
 import Parallax from "./sections/Parallax"
 import ServicesSection from "./sections/ServicesSection"
+import TourSection from "./sections/ToursSection"
 
 
 
@@ -18,8 +19,9 @@ const HomePage = () => {
         <BannerSection/>
         <FeaturedProductSection/>
         <Parallax/>
-        <ServicesSection/>
         <BikeSection/>
+        <ServicesSection/>
+        <TourSection/>
         <FaqSection/>
         <Footer/>
         

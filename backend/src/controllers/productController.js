@@ -1,4 +1,4 @@
-const { createProduct, updateProductById, findProductById, deleteProductById, getAllProducts } = require('../models/productModel');
+const { createProduct, updateProductById, findProductById, deleteProductById, getAllProducts, countAllProducts } = require('../models/productModel');
 const { uploadToCloudinary } = require('../middleware/cloudinaryImageUpload');
 
 // Create a new product
@@ -79,7 +79,7 @@ exports.updateProduct = async (req, res ) => {
 
         // Check if an image was uploaded
         if(req.file){
-            updatedProduct.productImage = req.file.cloudinaryUrl;
+            updatedProduct.Image = req.file.cloudinaryUrl;
         }
 
         // Update product in databse
@@ -103,19 +103,20 @@ exports.updateProduct = async (req, res ) => {
 // Get product
 exports.getProductById = async (req, res) => {
     try {
-        const productId = req.params.id ;
+        const productId = req.params.id;
 
-        // Fetch product from the database
-        const product = await findProductById(productId);
+        const result = await findProductById(productId);
 
-        if(product.length === 0){
-            return res.status(404).json({message: "Product not found"});
+        if (result.length === 0) {
+            return res.status(404).json({ message: "Product not found" });
         }
 
-        return res.status(200).json({product});
+        const product = result[0]; // Now safely get the product
+
+        return res.status(200).json({ product });
     } catch (error) {
         console.log("Error retrieving product:", error);
-        return res.status(500).json({message: "Server Error"});
+        return res.status(500).json({ message: "Server Error" });
     }
 };
 
@@ -138,17 +139,27 @@ exports.deleteProduct = async (req, res) => {
 };
 
 
-// Get all products
-exports.getAllProducts = async (_, res) => {
+exports.getAllProducts = async (req, res) => {
     try {
-        const products = await getAllProducts();
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const offset = (page - 1) * limit;
 
-        // Check if products array is empty
+        const products = await getAllProducts(limit, offset);
+        const totalProducts = await countAllProducts();
+
         if (products.length === 0) {
             return res.status(404).json({ message: "No products found" });
         }
 
-        return res.status(200).json({ products });
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        return res.status(200).json({
+            products,
+            currentPage: page,
+            totalPages,
+            totalProducts,
+        });
     } catch (error) {
         console.error("Error retrieving products:", error);
         return res.status(500).json({ message: "Server Error" });

@@ -48,7 +48,7 @@ exports.getCategoryById = async (req, res) => {
  
      const category = await getCategoryById(categoryId);
 
-     if(category.length === 0){
+     if(!category){
         return res.status(404).json({message: "No category found by id"});
      }
 

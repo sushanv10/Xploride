@@ -37,7 +37,7 @@ const HeroSection = () => {
         showThumbs={false}
         showStatus={false}
         showIndicators={true}
-        interval={5000}
+        interval={1800}
       >
         {slides.map((slide, index) => (
           <div key={index} className="h-[255px] sm:h-[400px] md:h-[500px] lg:h-[800px] bg-black">

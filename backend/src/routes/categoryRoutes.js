@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/add', authMiddleware, authorizeRole('admin'), addCategory);
 
 // Route to get category by id
-router.get('/:id', authMiddleware, getCategoryById);
+router.get('/:id', getCategoryById);
 
 // Route to get all category
 router.get('/',getAllCategory);

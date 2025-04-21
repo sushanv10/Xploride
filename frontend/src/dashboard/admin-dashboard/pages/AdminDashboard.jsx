@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeaderComponent from "./Header";
 import Sidebar from "./Sidebar";
 import Main from "./Main";
@@ -9,30 +9,36 @@ import ProductLists from "./products/ProductLists";
 import BikeLists from "./bikes/BikeLists";
 import TourLists from "./tours/TourLists";
 
-
-
 const AdminDashboard = () => {
-  const [activePage, setActivePage] = useState('Dashboard');
+  // Load activePage from localStorage (or default to 'Dashboard')
+  const [activePage, setActivePage] = useState(
+    localStorage.getItem("activePage") || "Dashboard"
+  );
+
+  // Save activePage to localStorage 
+  useEffect(() => {
+    localStorage.setItem("activePage", activePage);
+  }, [activePage]);
 
   const renderActiveComponent = () => {
-   switch (activePage) {
-    case 'Dashboard':
-      return <Main/>;
-    case 'Profile':
-      return <AdminProfile/>;
-    case 'CategoryLists':
-      return <CategoryLists/>;
-    case 'ProductLists':
-      return <ProductLists/>;
-    case 'BikeLists':
-      return <BikeLists/>;
-    case 'TourLists':
-      return <TourLists/>;
-    case 'Settings':
-      return <Settings/>;
-    default : 
-    return <Main/>;
-   }
+    switch (activePage) {
+      case "Dashboard":
+        return <Main />;
+      case "Profile":
+        return <AdminProfile />;
+      case "CategoryLists":
+        return <CategoryLists />;
+      case "ProductLists":
+        return <ProductLists />;
+      case "BikeLists":
+        return <BikeLists />;
+      case "TourLists":
+        return <TourLists />;
+      case "Settings":
+        return <Settings />;
+      default:
+        return <Main />;
+    }
   };
 
   return (

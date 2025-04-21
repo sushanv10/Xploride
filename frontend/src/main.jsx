@@ -4,12 +4,15 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ToastContainer } from 'react-toastify'
+import { CartProvider } from './context/CartContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>    
+    <ToastContainer/>
     <AuthProvider>
-      <ToastContainer/>
+      <CartProvider>
         <App/>
+      </CartProvider>
     </AuthProvider>
   </StrictMode>,
 )

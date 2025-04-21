@@ -4,7 +4,7 @@ import ButtonComponent from "../../../../components/ButtonComponent";
 import { useState } from "react";
 import { validateCategoryNameField } from "../../../../utils/validation";
 import axiosInstance from "../../../../config/AxiosConfig";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddCategory = ({ closeCategory }) => {
   const [categoryField, setCategoryField] = useState({ categoryName: '' });
@@ -24,7 +24,7 @@ const AddCategory = ({ closeCategory }) => {
     }));
   };
 
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate the form
@@ -47,7 +47,10 @@ const AddCategory = ({ closeCategory }) => {
 
       console.log(res);
       toast.success(res.data.message); // Show success toast message
+      setTimeout(() => {
       closeCategory(); // Close the modal after successful addition
+
+      },2000);
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Error adding category"); // Show error toast message
@@ -55,40 +58,48 @@ const AddCategory = ({ closeCategory }) => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <div className="flex justify-center items-center">
       <div className="bg-white h-[25rem] w-[25rem] -mt-180 z-200 rounded-2xl">
         <div className="flex justify-between p-4">
           <h3 className="text-center font-semibold text-[20px]">Add Category</h3>
           <IoClose className="text-blue-500 text-[25px] cursor-pointer" onClick={closeCategory} />
         </div>
+       
+        
+        <form onSubmit={handleSubmit}>
+          <div className="m-3 flex flex-col gap-5">
+            <InputComponent
+              placeholder="Category Name"
+              type="text"
+              name="categoryName"
+              value={categoryField.categoryName}
+              onChange={handleOnChange}
+              className="h-10 w-90 p-2"
+            />
+            {errors.categoryName && (
+              <div className="text-red-500 text-sm -my-2 mx-2">{errors.categoryName}</div> // Display error message
+            )}
 
-        <div className="m-3 flex flex-col gap-5">
-          <InputComponent
-            placeholder="Category Name"
-            type="text"
-            name="categoryName"
-            value={categoryField.categoryName}
-            onChange={handleOnChange}
-            className="h-10 w-90 p-2"
-          />
-          {errors.categoryName && (
-            <div className="text-red-500 text-sm -my-2 mx-2">{errors.categoryName}</div> // Display error message
-          )}
+            {/* <InputComponent
+              placeholder="Category Code"
+              name="categoryCode"
+              value={categoryField.categoryCode}
+              onChange={handleOnChange}
+              className="h-10 w-90 p-2"
+            /> */}
+          </div>
 
-          {/* <InputComponent
-            placeholder="Category Code"
-            name="categoryCode"
-            value={categoryField.categoryCode}
-            onChange={handleOnChange}
-            className="h-10 w-90 p-2"
-          /> */}
-        </div>
+          {/* Button */}
+          <div className="flex justify-center items-center my-7">
+            <ButtonComponent text="Add Category" type={'submit'} />
+          </div>
+        </form>
 
-        <div className="flex justify-center items-center my-7">
-          <ButtonComponent text="Add Category" onClick={handleClick} />
-        </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,0 +1,17 @@
+const express = require('express');
+const { createRental, cancelRental, updateRentalStatus } = require('../controllers/rentalController');
+const authMiddleware = require('../middleware/authMiddleware');
+const authorizeRole = require('../middleware/authorizationMiddleware');
+const { cloudinaryUpload, uploadToCloudinary } = require('../middleware/cloudinaryImageUpload');
+const router = express.Router();
+
+// Create rental (user)
+router.post('/rent/:bikeId', authMiddleware, authorizeRole('user'), cloudinaryUpload, uploadToCloudinary, createRental);
+
+// Cancel rental (user)
+router.delete('/cancel/:id', authMiddleware, authorizeRole('user'), cancelRental);
+
+// Update rental status (admin only)
+router.patch('/status/:id', authMiddleware, updateRentalStatus);
+
+module.exports = router;

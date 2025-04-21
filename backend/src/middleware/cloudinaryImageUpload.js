@@ -38,7 +38,7 @@ const cloudinaryStorage = multer.memoryStorage();  // Use memoryStorage to store
 const cloudinaryUpload = multer({
   storage: cloudinaryStorage,
   fileFilter: filter,
-}).single('productImage'); // Single file upload, expecting the field name 'image' in the request
+}).single('Image'); // Single file upload, expecting the field name 'image' in the request
 
 // Function to upload image to Cloudinary
 const uploadToCloudinary = async (req, res, next) => {
