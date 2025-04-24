@@ -169,8 +169,16 @@ exports.updateTour = async (req, res) => {
   }
 };
 
+exports.getToursByCategory = async (req, res) => {
+    const { category } = req.params;
 
-
+    try {
+        const tours = await tourModel.getBikeToursByCategory(category);
+        res.status(200).json(tours);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving tours by category", error });
+    }
+};
 
 // Delete
 exports.deleteTour = async (req, res) => {

@@ -6,7 +6,7 @@ import { IoTrailSignOutline } from 'react-icons/io5';
 
 const TourData = ({ data }) => {
   return (
-    <div className='p-5 flex flex-wrap gap-5 justify-evenly'>
+    <div className='p-5 flex flex-wrap gap-8 justify-evenly'>
       {data.map((tour) => (
         <div
           key={tour.tour_id}
@@ -51,12 +51,6 @@ const TourData = ({ data }) => {
            
           </div>
 
-          {/* Button */}
-          {/* <div className="flex justify-center ">
-            <Link to={`/tours/${tour.tour_id}`}>
-              <button className='cursor-pointer text-blue-500 '>View Full Detail</button>
-            </Link>
-          </div> */}
         </div>
       ))}
     </div>

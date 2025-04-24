@@ -143,6 +143,21 @@ exports.getAllBikeTours = async () => {
     }
 };
 
+// Get Bike Tours By Category
+exports.getBikeToursByCategory = async (category) => {
+    try {
+        const [tours] = await db.query(
+            "SELECT * FROM bike_tours WHERE category = ?",
+            [category]
+        );
+        return tours;
+    } catch (error) {
+        console.log("Error retrieving bike tours by category:", error);
+        throw error;
+    }
+};
+
+
 // Count Total Bike Tours
 exports.countAllBikeTours = async () => {
     try {

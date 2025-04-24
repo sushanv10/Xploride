@@ -49,7 +49,7 @@ export default function EditBike({ bikeId, closeEditBike, onUpdate }) {
         console.error("Failed to load bike data", error);
         toast.error("Failed to load bike data");
       } finally {
-        setLoading(false); // Hide the loading spinner once data is fetched
+        setLoading(false); 
       }
     };
 

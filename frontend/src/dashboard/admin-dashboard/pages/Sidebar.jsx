@@ -6,13 +6,19 @@ import { FaRegUser } from "react-icons/fa6";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import LogoComponent from "../../../components/LogoComponent";
+import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 
 const Sidebar = ({ setActiveIndex }) => {
   const [showSideBar, setShowSideBar] = useState(false);
+  const [itineraryDropdown, setItineraryDropDown] = useState(false);
  
   const toggleSideBar = () => {
     setShowSideBar(!showSideBar);
   };
+
+  const toggleDropDown = () => {
+    setItineraryDropDown(!itineraryDropdown);
+  }
 
   return (
     <>
@@ -73,7 +79,7 @@ const Sidebar = ({ setActiveIndex }) => {
               {/* Bikes */}
               <li onClick={() => setActiveIndex("BikeLists")}>
                 <div
-                  className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md cursor-pointer"
+                  className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#ad8686] hover:text-white rounded-md cursor-pointer"
                 >
                   <MdDirectionsBike className="h-6 w-6 text-gray-500" />
                   <span className="pl-3">Bikes</span>
@@ -86,9 +92,40 @@ const Sidebar = ({ setActiveIndex }) => {
                   className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md cursor-pointer"
                 >
                   <MdOutlineTour className="h-6 w-6 text-gray-500" />
-                  <span className="pl-3">Tour</span>
+                  <div className=" flex">
+                    <span className="pl-3">Tour</span>
+                    <div onClick={toggleDropDown}>
+                      {itineraryDropdown ? 
+                        <RiArrowDropDownLine className="absolute right-6 text-[25px]" /> : 
+                        (
+                        <RiArrowDropUpLine  className="absolute right-6 text-[25px]" /> 
+                        )
+                      }
+
+                    </div>
+
+                  </div>
                 </div>
               </li>
+
+              {/* Add Itinerary */}
+              {!itineraryDropdown && 
+                <div className="-mt-2">
+                  {/* Bikes */}
+                  <li onClick={() => setActiveIndex("Itinerary")}>
+                    <div
+                      className="flex pl-10 items-center px-4 py-2 text-gray-400 transition 
+                      hover:bg-[#ad8686] hover:text-white rounded-md cursor-pointer"
+                    >
+                      {/* <MdDirectionsBike className="h-6 w-6 text-gray-500" /> */}
+                      <span className="pl-3">Add Itinerary</span>
+                    </div>
+                  </li>
+
+                </div>
+              }
+
+
 
               <li onClick={() => setActiveIndex("Settings")} className="cursor-pointer">
                 <div className="flex items-center px-4 py-2 text-gray-400 transition hover:bg-[#222222] hover:text-white rounded-md">

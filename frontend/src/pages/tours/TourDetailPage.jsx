@@ -4,34 +4,69 @@ import axiosInstance from "../../config/AxiosConfig";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { IoPricetagOutline, IoTrailSignOutline } from "react-icons/io5";
 import ButtonComponent from "../../components/ButtonComponent";
-import { LiaRupeeSignSolid } from "react-icons/lia";
 import { GoCalendar } from "react-icons/go";
 import { GiPathDistance } from "react-icons/gi";
 import { MdAccessTime, MdOutlineDirectionsBike } from "react-icons/md";
 import { RiCoupon2Line } from "react-icons/ri";
 import Footer from "../footer/Footer";
+import TourData from "../../utils/data/TourData";
+import HeadingComponent from "../../components/HeadingComponent";
 
 const TourDetailPage = () => {
   const [tour, setTour] = useState(null);
+  const [itinerary, setItinerary] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [relatedTours, setRelatedTours] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
   const { id } = useParams();
 
+  useEffect(() => {
+  const fetchRelatedTours = async () => {
+    if (tour && tour.category) {
+      try {
+        const response = await axiosInstance.get(`/tour/category/${tour.category}`);
+        const fetchedRelatedTours = response.data;
+        setRelatedTours(fetchedRelatedTours.slice(0,3)); 
+      } catch (error) {
+        console.log("Error fetching related tours:", error);
+      }
+    }
+  };
+
+  fetchRelatedTours();
+  }, [tour]);
+
+
+  // Fetch tour details
   useEffect(() => {
     const fetchSingleTour = async () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get(`tour/${id}`);
         const fetchedTour = response.data;
-        console.log("Tour fetched successfully", fetchedTour);
         setTour(fetchedTour);
+        console.log("Tour fetched successfully", fetchedTour);
       } catch (error) {
         console.log("Error fetching tour:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchSingleTour();
+    if (id) fetchSingleTour();
+  }, [id]);
+
+  // Fetch itinerary
+  useEffect(() => {
+    const fetchItinerary = async (tour_id) => {
+      try {
+        const response = await axiosInstance.get(`tour-itinerary/${tour_id}`);
+        setItinerary(response.data.data);
+        console.log("Itinerary fetched", response.data.data);
+      } catch (error) {
+        console.error("Error fetching itinerary:", error);
+      }
+    };
+    if (id) fetchItinerary(id); 
   }, [id]);
 
   if (loading) {
@@ -50,6 +85,8 @@ const TourDetailPage = () => {
     );
   }
 
+  
+
   return (
     <div className="min-h-screen text-white relative">
       {/* Banner Image */}
@@ -67,10 +104,10 @@ const TourDetailPage = () => {
       </div>
 
       {/* Tab Section */}
-      <div className="max-w-4xl mx-auto py-10 px-4">
+      <div className="max-w-5xl mx-auto py-10 px-4">
         {/* Tabs */}
         <div className="flex space-x-6 border-b border-gray-700 mb-6">
-          {["overview", "itinerary", "details"].map((tab) => (
+          {["Overview", "Full Itinerary", "Tour Details"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -83,93 +120,134 @@ const TourDetailPage = () => {
               {tab}
             </button>
           ))}
-
         </div>
 
         {/* Tab Content */}
         <div className="space-y-3 text-white">
-          {activeTab === "overview" && (
+          {activeTab === "Overview" && (
             <>
-            <div className="flex justify-evenly gap-12">
-                <div className="flex flex-col items-center gap-2">
-                    <IoPricetagOutline   className='text-gray-500 text-2xl' />
-                    <p className="text-gray-400 ">Price From</p>
-                    <h5 className='text-white text-sm '>Rs {tour.price}</h5>
-                </div>
+              <div className="flex justify-evenly gap-12 flex-wrap">
+                <InfoIcon label="Price From" value={`Rs ${tour.price}`} Icon={IoPricetagOutline} />
+                <InfoIcon label="Duration" value={tour.duration} Icon={GoCalendar} />
+                <InfoIcon label="Distance" value={`${tour.distance} Km`} Icon={GiPathDistance} />
+                <InfoIcon label="Difficulty" value={tour.difficulty} Icon={MdOutlineDirectionsBike} />
+                <InfoIcon label="Tour Code" value={tour.tour_code} Icon={RiCoupon2Line} />
+                <InfoIcon
+                  label="Next Departure"
+                  value={new Date(tour.next_departure).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  Icon={MdAccessTime}
+                />
+              </div>
 
-                <div className="flex flex-col items-center gap-2">
-                    <GoCalendar className='text-gray-500 text-2xl' />
-                    <p className="text-gray-400 ">Duration</p>
-                    <h5 className='text-white text-sm '>{tour.duration}</h5>
-                </div>
-
-                <div className="flex flex-col items-center gap-2">
-                    <GiPathDistance className='text-gray-500 text-2xl' />
-                    <p className="text-gray-400 ">Distance</p>
-                    <h5 className='text-white text-sm '>{tour.distance} Km</h5>
-                </div>
-
-                <div className="flex flex-col items-center gap-2">
-                    <MdOutlineDirectionsBike className='text-gray-500 text-2xl' />
-                    <p className="text-gray-400 ">Difficulty</p>
-                    <h5 className='text-white text-sm '>{tour.difficulty}</h5>
-                </div>
-
-                
-                <div className="flex flex-col items-center gap-2">
-                    <RiCoupon2Line className='text-gray-500 text-2xl' />
-                    <p className="text-gray-400 ">Tour Code</p>
-                    <h5 className='text-white text-sm '>{tour.tour_code}</h5>
-                </div>
-
-                <div className="flex flex-col items-center gap-2">
-                    <MdAccessTime className="text-gray-500 text-2xl" />
-                    <p className="text-gray-400">Next Departure</p>
-                    <h5 className="text-white text-sm">
-                        {new Date(tour.next_departure).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        })}
-                    </h5>
-                </div>
-
-
-            </div>
-
-            <div className="my-15">
+              <div className="my-15">
                 <div className="flex flex-col gap-4">
-                    <h4 className="text-blue-400 text-4xl">About This Bike Tour</h4>
-                    <p className="text-gray-400">{tour.description}</p>
+                  <HeadingComponent text={'About This TOUR'}/> 
+                  <p className="text-gray-400">{tour.description}</p>
                 </div>
-                {/* <p><span className="font-semibold">Price:</span> ${tour.price}</p>
-                <p><span className="font-semibold">Next Departure:</span> {tour.next_departure}</p> */}
+              </div>
+              
+              {/* Tour Details */}
+              <div className="flex flex-col gap-3 -my-5">
+                <HeadingComponent text={'Tour Details'}/>
+                <p><span className="font-semibold">Duration:</span> {tour.duration}</p>
+                <p><span className="font-semibold">Distance:</span> {tour.distance} Km</p>
+                <p><span className="font-semibold">Difficulty:</span> {tour.difficulty}</p>
+                <p><span className="font-semibold">Tour Code:</span> {tour.tour_code}</p>
+                <p><span className="font-semibold">Category:</span> {tour.category}</p>
+                <p><span className="font-semibold">Bike Hire Cost:</span> Rs {tour.bike_hire_cost}</p>
+                <p><span className="font-semibold">Price From:</span> Rs {tour.price}</p>
+              </div>
 
-            </div>
+              {/* Itinerary */}
+              <div className="my-15">
+                <HeadingComponent text={'Itinerary'}/>
+                {itinerary.length > 0 ? (
+                <div className="space-y-8">
+                  {itinerary.map((item) => (
+                    <div
+                      key={item.itinerary_id}
+                      className="border-b border-gray-700 rounded-sm p-6"
+                    >
+                      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+                        Day {item.day_number}: {item.title}
+                      </h3>
+                       <p className="text-gray-300 mb-2">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="italic text-gray-400">No itinerary available for this tour.</p>
+              )}
+              </div>
+              
+              <div className="my-15 ">
+                <HeadingComponent text={'Suggested Tours For You'}/>
+                {relatedTours.length > 0 && (
+                  <div className="flex -ml-15">
+                    <TourData data={relatedTours}/>
+
+                  </div>
+                )}
+              </div>
             </>
           )}
 
-          {activeTab === "itinerary" && (
+          {activeTab === "Full Itinerary" && (
             <>
-              <p className="italic text-gray-300">Itinerary details coming soon or fetched from backend...</p>
+              {itinerary.length > 0 ? (
+                <div className="space-y-8">
+                  {itinerary.map((item) => (
+                    <div
+                      key={item.itinerary_id}
+                      className="border border-gray-700 rounded-lg p-6"
+                    >
+                      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+                        Day {item.day_number}: {item.title}
+                      </h3>
+                      <p className="text-gray-300 mb-2">{item.description}</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-400">
+                        <p><span className="text-white font-medium">Accommodation:</span> {item.accommodation}</p>
+                        <p><span className="text-white font-medium">Meals:</span> {item.meals}</p>
+                        <p><span className="text-white font-medium">Distance:</span> {item.distance} </p>
+                        <p><span className="text-white font-medium">Elevation:</span> {item.elevation}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="italic text-gray-400">No itinerary available for this tour.</p>
+              )}
             </>
           )}
 
-          {activeTab === "details" && (
+          {activeTab === "Tour Details" && (
             <>
               <p><span className="font-semibold">Duration:</span> {tour.duration}</p>
               <p><span className="font-semibold">Distance:</span> {tour.distance}</p>
               <p><span className="font-semibold">Difficulty:</span> {tour.difficulty}</p>
               <p><span className="font-semibold">Tour Code:</span> {tour.tour_code}</p>
               <p><span className="font-semibold">Category:</span> {tour.category}</p>
-              <p><span className="font-semibold">Bike Hire Cost:</span> ${tour.bike_hire_cost}</p>
+              <p><span className="font-semibold">Bike Hire Cost:</span> Rs {tour.bike_hire_cost}</p>
             </>
           )}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
+
+// 🔹 InfoIcon component
+const InfoIcon = ({ label, value, Icon }) => (
+  <div className="flex flex-col items-center gap-2 min-w-[100px]">
+    <Icon className="text-gray-500 text-2xl" />
+    <p className="text-gray-400">{label}</p>
+    <h5 className="text-white text-sm text-center">{value}</h5>
+  </div>
+);
 
 export default TourDetailPage;
