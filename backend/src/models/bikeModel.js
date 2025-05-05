@@ -26,6 +26,17 @@ exports.findBikeById = async (bikeId) => {
     }
 };
 
+exports.getBikeByCategory = async (category) => {
+    try {
+       const [bikes] = await db.query("SELECT * FROM bikes WHERE category = ?", [category]);
+        return bikes;
+        
+    } catch (error) {
+        console.log("Error retrieving bike by category:", error);
+        throw error;
+    }
+}
+
 // Update bike by ID
 exports.updateBikeById = async (bikeId, updateBike) => {
     if (bikeId === undefined || bikeId === null) {

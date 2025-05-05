@@ -9,6 +9,7 @@ import ProductLists from "./products/ProductLists";
 import BikeLists from "./bikes/BikeLists";
 import TourLists from "./tours/TourLists";
 import ItineraryLists from "./tours/itinerary/ItineraryLists";
+import AvailabilityLists from "./tours/availability/AvailabilityLists";
 
 const AdminDashboard = () => {
   // Load activePage from localStorage (or default to 'Dashboard')
@@ -37,6 +38,8 @@ const AdminDashboard = () => {
         return <TourLists />;
       case "Itinerary":
         return <ItineraryLists/>;
+      case "Availability":
+        return <AvailabilityLists/>;
       case "Settings":
         return <Settings />;
       default:

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import FormComponent from '../../../../../components/FormComponent';
 import axiosInstance from '../../../../../config/AxiosConfig';
@@ -60,7 +60,7 @@ const ItineraryLists = () => {
       console.log("Tour Deleted:", res.data.message);
       toast.success(res.data.message);
       setTimeout(() => {
-        fetchTours();
+        fetchItineraries();
       }, 500);
     } catch (error) {
       console.error(error);

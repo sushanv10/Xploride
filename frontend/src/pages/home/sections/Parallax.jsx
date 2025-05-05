@@ -3,7 +3,7 @@ const Parallax = () => {
     <div 
       className="relative w-full h-[350px] sm:h-[300px] md:h-[350px] lg:h-[500px]"
       style={{ 
-        backgroundImage:`url("https://askproject.net/venturo/wp-content/uploads/sites/84/2022/06/luca-david-ia8uTRsZZYY-unsplash.jpg")`,
+        backgroundImage:`url("https://res.cloudinary.com/dyt7drhch/image/upload/v1744285125/xploride/images/kn4gqtoauhm7lkrzpndd.jpg")`,
         backgroundAttachment: 'fixed',
         backgroundSize: "cover",
         backgroundPosition: "center",

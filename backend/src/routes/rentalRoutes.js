@@ -9,9 +9,9 @@ const router = express.Router();
 router.post('/rent/:bikeId', authMiddleware, authorizeRole('user'), cloudinaryUpload, uploadToCloudinary, createRental);
 
 // Cancel rental (user)
-router.delete('/cancel/:id', authMiddleware, authorizeRole('user'), cancelRental);
+router.patch('/cancel/:id', authMiddleware, authorizeRole('user'), cancelRental);
 
 // Update rental status (admin only)
-router.patch('/status/:id', authMiddleware, updateRentalStatus);
+router.patch('/status/:id', authMiddleware, authorizeRole('user'), updateRentalStatus);
 
 module.exports = router;

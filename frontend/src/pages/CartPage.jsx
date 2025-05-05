@@ -5,7 +5,7 @@ import HeadingComponent from "../components/HeadingComponent";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../components/ButtonComponent";
 
-const MAX_QUANTITY = 5; // Max limit for product quantity
+const MAX_QUANTITY = 5; 
 
 export default function CartPage() {
   const [cart, setCart] = useCart();

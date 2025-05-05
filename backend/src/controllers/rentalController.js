@@ -12,15 +12,19 @@ exports.createRental = async (req, res) => {
 
             const userId = req.user.userId;
             const bikeId = req.params.bikeId;
-            const { rentStartDate, rentEndDate, status } = req.body;
+            const { rentStartDate, rentEndDate } = req.body;
 
-            if (!rentStartDate || !rentEndDate || !status || !req.file?.cloudinaryUrl) {
+            if (!rentStartDate || !rentEndDate || !req.file?.cloudinaryUrl) {
                 return res.status(400).json({ message: "All fields are required" });
             }
 
             const identificationImage = req.file.cloudinaryUrl;
+            const status = 'pending'; 
 
-            const [bikeDetails] = await db.execute(`SELECT price FROM bikes WHERE bikeId = ?`, [bikeId]);
+            const [bikeDetails] = await db.execute(
+                `SELECT price FROM bikes WHERE bikeId = ?`,
+                [bikeId]
+            );
 
             if (bikeDetails.length === 0) {
                 return res.status(404).json({ message: "Bike not found." });
@@ -37,7 +41,15 @@ exports.createRental = async (req, res) => {
 
             const totalAmount = rentalPricePerDay * durationInDays;
 
-            const result = await createRental(userId, bikeId, rentStartDate, rentEndDate, status, identificationImage, totalAmount);
+            const result = await createRental(
+                userId,
+                bikeId,
+                rentStartDate,
+                rentEndDate,
+                status,
+                identificationImage,
+                totalAmount
+            );
 
             if (result.overlap) {
                 return res.status(409).json({ message: "This bike is already booked for the selected dates" });
@@ -58,7 +70,6 @@ exports.createRental = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
 
 
 // Cancel rental by user

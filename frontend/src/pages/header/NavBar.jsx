@@ -49,7 +49,7 @@ const NavBar = () => {
   }
 
   const handleProfileClick = () => {
-    if(auth.user){
+    if(auth?.user){
       navigate('/user-dashboard');
     } else{
       navigate('/login');
@@ -80,7 +80,7 @@ const NavBar = () => {
             <li className="hover:text-blue-400 transition"><Link to='/'>HOME</Link></li>
             <li className="hover:text-blue-400 transition"><Link to='/about'>ABOUT</Link></li>
             <li className="hover:text-blue-400 transition"><Link to='/shop'>SHOP</Link></li>
-            <li className="hover:text-blue-400 transition"><Link to='/rentals'>RENTALS</Link></li>
+            <li className="hover:text-blue-400 transition"><Link to='/rentals'>Bikes</Link></li>
             <li className="hover:text-blue-400 transition"><Link to='/tours'>TOURS</Link></li>
           </ul>
 

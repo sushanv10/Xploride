@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBike, updateBike, getBikeById, deleteBike, getAllBikes } = require('../controllers/bikeController');
+const { createBike, updateBike, getBikeById, deleteBike, fetchAllBikes, fetchBikeByCategory } = require('../controllers/bikeController');
 const { cloudinaryUpload, uploadToCloudinary } = require('../middleware/cloudinaryImageUpload');
 const authMiddleware = require('../middleware/authMiddleware');
 const authorizeRole = require('../middleware/authorizationMiddleware');
@@ -17,7 +17,10 @@ router.get('/:id', getBikeById);
 // Route to delete a bike by ID
 router.delete('/delete/:id', authMiddleware, authorizeRole('admin'), deleteBike);
 
+// Route to get bike by category
+router.get('/bike-category/:category', fetchBikeByCategory);
+
 // Route to get all bikes
-router.get('/', getAllBikes);
+router.get('/', fetchAllBikes);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { RiCalendar2Line, RiCustomSize, RiMotorbikeLine } from 'react-icons/ri';
+import {  RiCustomSize, RiMotorbikeLine } from 'react-icons/ri';
 import { BiCategory } from "react-icons/bi";
 import { GiCartwheel } from "react-icons/gi";
 import { SiBrandfolder } from 'react-icons/si';
@@ -8,7 +8,7 @@ import { FaWeightScale } from 'react-icons/fa6';
 
 const BikeData = ({ data }) => {
   return (
-    <div className='p-5 flex flex-wrap gap-5 justify-evenly'>
+    <div className='p-5 flex flex-wrap gap-4 justify-evenly'>
       {data.map((bike) => (
         <div
           key={bike.bikeId}

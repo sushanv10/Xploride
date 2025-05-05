@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../config/AxiosConfig";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { IoPricetagOutline, IoTrailSignOutline } from "react-icons/io5";
-import ButtonComponent from "../../components/ButtonComponent";
 import { GoCalendar } from "react-icons/go";
 import { GiPathDistance } from "react-icons/gi";
 import { MdAccessTime, MdOutlineDirectionsBike } from "react-icons/md";
@@ -11,13 +10,15 @@ import { RiCoupon2Line } from "react-icons/ri";
 import Footer from "../footer/Footer";
 import TourData from "../../utils/data/TourData";
 import HeadingComponent from "../../components/HeadingComponent";
+import ButtonComponent from "../../components/ButtonComponent";
 
 const TourDetailPage = () => {
   const [tour, setTour] = useState(null);
   const [itinerary, setItinerary] = useState([]);
+  const [availability, setAvailability] = useState([]);
   const [loading, setLoading] = useState(true);
   const [relatedTours, setRelatedTours] = useState([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("Overview");
   const { id } = useParams();
 
   useEffect(() => {
@@ -54,6 +55,21 @@ const TourDetailPage = () => {
     };
     if (id) fetchSingleTour();
   }, [id]);
+
+  // Fetch Availability
+  useEffect(() => {
+    const fetchAvailability = async (tour_id) => {
+      try {
+        const response = await axiosInstance.get(`tour-availability/${tour_id}`);
+        setAvailability(response.data.data);
+        console.log("Availability Fetched", response.data.data);
+      } catch (error) {
+        console.error("Error fetching availability:", error);
+      }
+    };
+    if (id) fetchAvailability(id); 
+
+  },[id]);
 
   // Fetch itinerary
   useEffect(() => {
@@ -120,6 +136,9 @@ const TourDetailPage = () => {
               {tab}
             </button>
           ))}
+          <div className="absolute right-46 -mt-2">
+            <ButtonComponent text={'Book Tour'}/>
+          </div>
         </div>
 
         {/* Tab Content */}
@@ -161,6 +180,46 @@ const TourDetailPage = () => {
                 <p><span className="font-semibold">Bike Hire Cost:</span> Rs {tour.bike_hire_cost}</p>
                 <p><span className="font-semibold">Price From:</span> Rs {tour.price}</p>
               </div>
+            {/* Availability */} 
+            <div className="my-15 flex flex-col  space-y-8">
+              <HeadingComponent text="Available Tours" />
+              {availability.length > 0 ? (
+              <div className="w-full max-w-5xl flex flex-col gap-6">
+                <div className="grid grid-cols-4 border-b border-gray-500 gap-4 text-center font-semibold text-gray-300">
+                  <h4>Date</h4>
+                  <h4>Slots</h4>
+                  <h4>Status</h4>
+                  <h4>Action</h4>
+                </div>
+
+              {availability.map((item) => (
+                <div
+                  key={item.availability_id}
+                  className="grid grid-cols-4 gap-4 items-center text-center border-b border-gray-500 py-3"
+                >
+                  <p>
+                    {new Date(item.available_date).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}{" "}
+                    -{" "}
+                    {new Date(item.end_date).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p> 
+                  <p>{item.available_slots}</p>
+                  <p>{item.availability_status}</p>
+                  <ButtonComponent text="Book Tour" />
+                </div>
+                ))}
+              </div>
+                ) : (
+                  <p className="italic text-gray-400">No Availability for this tour.</p>
+                )}
+              </div>
 
               {/* Itinerary */}
               <div className="my-15">
@@ -182,16 +241,15 @@ const TourDetailPage = () => {
               ) : (
                 <p className="italic text-gray-400">No itinerary available for this tour.</p>
               )}
-              </div>
-              
-              <div className="my-15 ">
-                <HeadingComponent text={'Suggested Tours For You'}/>
-                {relatedTours.length > 0 && (
-                  <div className="flex -ml-15">
-                    <TourData data={relatedTours}/>
+              </div> 
 
-                  </div>
-                )}
+              <div className="my-18 ">
+                <HeadingComponent text={'Suggested Tours For You'}/>
+                  {relatedTours.length > 0 ? (
+                    <TourData data={relatedTours} />
+                  ) : (
+                    <p className="italic text-gray-400">No related tours found.</p>
+                  )}
               </div>
             </>
           )}
@@ -236,7 +294,10 @@ const TourDetailPage = () => {
           )}
         </div>
       </div>
-      <Footer />
+      {/* Footer */}
+      <div className="">
+        <Footer/>
+      </div>
     </div>
   );
 };

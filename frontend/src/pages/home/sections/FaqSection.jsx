@@ -82,7 +82,7 @@ const FaqSection = () => {
         {/* Image Section */}
         <div className="flex justify-center">
           <img
-            src="https://askproject.net/venturo/wp-content/uploads/sites/84/2022/06/bike-UYC7MT6.jpg"
+            src="https://res.cloudinary.com/dyt7drhch/image/upload/v1746005441/xploride/images/vo2hbwysa9dpf526x8vf.jpg"
             className="w-full max-w-[800px] rounded-md shadow-md"
             alt="Bike Rental"
           />

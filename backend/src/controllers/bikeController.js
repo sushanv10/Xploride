@@ -1,4 +1,4 @@
-const { createBike, updateBikeById, findBikeById, deleteBikeById, getAllBikes } = require('../models/bikeModel');
+const { createBike, updateBikeById, findBikeById, deleteBikeById, getAllBikes, getBikeByCategory } = require('../models/bikeModel');
 const { cloudinaryUpload, uploadToCloudinary } = require('../middleware/cloudinaryImageUpload');
 
 // Create a new bike
@@ -127,6 +127,18 @@ exports.getBikeById = async (req, res) => {
   }
 };
 
+exports.fetchBikeByCategory = async (req,res) => {
+  try {
+    const {category} = req.params ;
+    const bikes = await getBikeByCategory(category);
+    res.status(200).json({bikes})
+  } catch (error) {
+    console.log("Error fetching bike by category", error);
+    res.status(500).json({success: false, error})
+    
+  }
+}
+
 // Delete a bike
 exports.deleteBike = async (req, res) => {
   try {
@@ -145,7 +157,7 @@ exports.deleteBike = async (req, res) => {
 };
 
 // Get all bikes
-exports.getAllBikes = async (req, res) => {
+exports.fetchAllBikes = async (req, res) => {
   try {
     const bikes = await getAllBikes();
 

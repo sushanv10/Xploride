@@ -11,9 +11,11 @@ import ProtectedRoute from './route/ProtectedRoute'
 import ShopPage from './pages/shop/ShopPage'
 import CartPage from './pages/CartPage'
 import ProductPage from './pages/product/ProductPage'
-import BikesPage from './pages/bikes/BikeDetailPage'
 import BikeDetailPage from './pages/bikes/BikeDetailPage'
 import TourDetailPage from './pages/tours/TourDetailPage'
+import BikePage from './pages/bikes/BikePage'
+import TourPage from './pages/tours/TourPage'
+import BikeRentalPage from './pages/rentals/BikeRentalPage'
 
 const App = () => {
   return (
@@ -25,9 +27,12 @@ const App = () => {
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/register' element={<RegisterPage/>}/> 
         <Route path='/about' element={<AboutPage/>}/> 
-        <Route path='/shop' element={<ShopPage />}/>
+        <Route path='/shop' element={<ShopPage/>}/>
+        <Route path='/rentals' element={<BikePage/>}/>
+        <Route path='/tours' element={<TourPage/>}/>
         <Route path='/product/:id' element={<ProductPage/>}/>
         <Route path='/bikes/:id' element={<BikeDetailPage/>}/>
+        <Route path="/rent/:id" element={<BikeRentalPage />} />
         <Route path='/tour/:id' element={<TourDetailPage/>}/>
 
         {/* ProtectedRoute */}

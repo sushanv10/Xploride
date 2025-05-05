@@ -9,6 +9,7 @@ const rentalRoutes = require("./src/routes/rentalRoutes.js");
 const tourRoutes = require("./src/routes/tourRoutes.js");
 const tourImageRoutes = require("./src/routes/tourImageRoutes.js");
 const tourItineraryRoutes = require("./src/routes/tourItineraryRoutes.js");
+const tourAvailabilityRoutes = require("./src/routes/tourAvailabilityRoutes.js");
 const cookieParser = require('cookie-parser');
 const rateLimiter = require('./src/utils/ratelimeter.js')
 
@@ -37,10 +38,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/category', categoryRoutes);
 app.use("/api/bikes", bikeRoutes);
-app.use("/api/bikesRental/", rentalRoutes)
+app.use("/api/bikesRental/", rentalRoutes);
 app.use("/api/tour", tourRoutes);
 app.use("/api/tour-images", tourImageRoutes);
 app.use("/api/tour-itinerary", tourItineraryRoutes);
+app.use("/api/tour-availability", tourAvailabilityRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

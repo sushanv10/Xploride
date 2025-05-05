@@ -1,14 +1,40 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent";
 import axiosInstance from "../../config/AxiosConfig";
 import Footer from "../footer/Footer";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import BikeRentalPage from "../rentals/BikeRentalPage";
+import { useAuth } from "../../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import HeadingComponent from "../../components/HeadingComponent";
+import BikeData from "../../utils/data/BikeData";
 
 const BikeDetailPage = () => {
   const [bike, setBike] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [relatedBike, setRelatedBike]= useState([]);
+  const [auth] = useAuth();
+  const [showBikeRentalPage, setShowBikeRentalPage] = useState(false);
   let { id } = useParams();
+
+  useEffect(() => {
+    const fetchRelatedBikes = async () => {
+      if (bike && bike.category) {
+        try {
+          const response = await axiosInstance.get(`bikes/bike-category/${bike.category}`);
+          const fetchedRelatedBikes = response.data.bikes
+          console.log("Fetched Bike Category", response);
+          setRelatedBike(fetchedRelatedBikes.slice(0,4)); 
+        } catch (error) {
+          console.log("Error fetching related bikes:", error);
+        }
+      }
+    };
+
+    fetchRelatedBikes();
+  }, [bike]);
 
   useEffect(() => {
     const fetchSingleBike = async () => {
@@ -43,9 +69,24 @@ const BikeDetailPage = () => {
     );
   }
 
+  const toggleBikeRentalPage = () => {
+    if(!auth?.user){
+      toast.info("Please Login to rent a bike")
+      setTimeout(() => {
+        navigate('/login')
+      },3000)
+    } else {
+      setShowBikeRentalPage(!showBikeRentalPage)
+    }
+  }
+
   return (
     <>
+    <ToastContainer/>
       {/* Hero Section */}
+      {showBikeRentalPage && 
+         <div className="fixed inset-0 bg-black opacity-80 z-10"></div>
+      }
       <div
         className="relative h-[400px] bg-cover bg-center"
         style={{
@@ -106,7 +147,27 @@ const BikeDetailPage = () => {
             Rental Price : Rs {bike.price || "0"} per day
           </p>
           <p className="mt-4 text-[18px]">{bike.description || "No description available."}</p>
-          <ButtonComponent className="mt-6" text="Rent Bike" />
+          
+            <ButtonComponent className="mt-6" text="Rent Bike" onClick={toggleBikeRentalPage}/>
+       
+
+          {showBikeRentalPage &&
+           <BikeRentalPage 
+           closePage = {() => setShowBikeRentalPage(false)}
+          />}
+        </div>
+      </div>
+
+      {/* Related Bike Section */}
+      <div className="my-5 ml-15">
+        <HeadingComponent text={'Related Bikes'}/>
+        <div className="flex justify-self-start">
+          {relatedBike.length > 0 ? (
+            <BikeData data={relatedBike}/>
+          ) : 
+            <p className="italic text-gray-400">No related bikes found.</p>
+        }
+
         </div>
       </div>
 
