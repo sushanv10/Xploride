@@ -7,6 +7,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import LogoComponent from "../../../components/LogoComponent";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
+import { TbBrandBooking } from "react-icons/tb";
 
 const Sidebar = ({ setActiveIndex }) => {
   const [showSideBar, setShowSideBar] = useState(false);
@@ -24,7 +25,7 @@ const Sidebar = ({ setActiveIndex }) => {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative ">
         {/* Hamburger Menu */}
         <div
           className="absolute top-7 left-4 text-white text-2xl cursor-pointer z-[150]"
@@ -35,7 +36,7 @@ const Sidebar = ({ setActiveIndex }) => {
 
         {/* Sidebar */}
         <aside
-          className={`fixed top-0 left-0 h-full w-60 z-[100] bg-gradient-to-b from-[#0a0a0a] to-[#1a1a1a] backdrop-blur-lg text-gray-300 text-sm shadow-2xl transition-transform duration-500 transform ${
+          className={`fixed top-0 left-0 h-full overflow-y-scroll w-60 z-[100] bg-gradient-to-b from-[#0a0a0a] to-[#1a1a1a] backdrop-blur-lg text-gray-300 text-sm shadow-2xl transition-transform duration-500 transform ${
             showSideBar ? "translate-x-0" : "-translate-x-64"
           }`}
         >
@@ -84,6 +85,14 @@ const Sidebar = ({ setActiveIndex }) => {
                 <div className={menuItemClasses}>
                   <MdDirectionsBike className="h-6 w-6" />
                   <span>Bikes</span>
+                </div>
+              </li>
+
+              {/* rentals */}
+              <li onClick={() => setActiveIndex("Rentals")}>
+                <div className={menuItemClasses}>
+                  <TbBrandBooking  className="h-6 w-6" />
+                  <span>Rentals</span>
                 </div>
               </li>
 

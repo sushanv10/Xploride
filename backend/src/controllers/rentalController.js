@@ -1,4 +1,4 @@
-const { createRental, cancelRental, updateRentalStatus } = require('../models/rentalModel');
+const { createRental, cancelRental, updateRentalStatus, getRentalByIdWithUser, getAllRentals } = require('../models/rentalModel');
 const { cloudinaryUpload, uploadToCloudinary } = require('../middleware/cloudinaryImageUpload');
 const db = require('../config/db');
 
@@ -91,7 +91,27 @@ exports.cancelRental = async (req, res) => {
     }
 };
 
+
+exports.getRentalDetailsWithUser = async (req, res) => {
+    try {
+        const rentalId = req.params.id;
+
+        const rental = await getRentalByIdWithUser(rentalId);
+
+        if (!rental) {
+            return res.status(404).json({ message: "Rental not found" });
+        }
+
+        res.status(200).json(rental);
+    } catch (error) {
+        console.error("Error fetching rental details:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
 // Admin updates rental status
+// In rentalController.js
 exports.updateRentalStatus = async (req, res) => {
     try {
         const { status } = req.body;
@@ -99,13 +119,24 @@ exports.updateRentalStatus = async (req, res) => {
 
         const result = await updateRentalStatus(rentalId, status);
 
-        if (result.affectedRows === 0) {
+        if (result.notFound) {
             return res.status(404).json({ message: "Rental not found" });
         }
 
-        res.status(200).json({ message: "Rental status updated" });
+        res.status(200).json({ message: "Rental status updated", rentalId, status });
     } catch (error) {
         console.error("Update rental status error:", error);
         res.status(500).json({ message: "Server Error" });
+    }
+};
+
+
+exports.getAllRentals = async (req, res) => {
+    try {
+        const rentals = await getAllRentals();
+        res.status(200).json(rentals);
+    } catch (error) {
+        console.error("Error getting all rentals:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };

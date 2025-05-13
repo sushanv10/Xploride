@@ -16,6 +16,8 @@ import TourDetailPage from './pages/tours/TourDetailPage'
 import BikePage from './pages/bikes/BikePage'
 import TourPage from './pages/tours/TourPage'
 import BikeRentalPage from './pages/rentals/BikeRentalPage'
+import TourBooking from './pages/tours/TourBooking'
+import AboutUs from './pages/about/AboutPage'
 
 const App = () => {
   return (
@@ -26,7 +28,7 @@ const App = () => {
         <Route path='/' element={<HomePage/>}/>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/register' element={<RegisterPage/>}/> 
-        <Route path='/about' element={<AboutPage/>}/> 
+        <Route path='/about' element={<AboutUs/>}/> 
         <Route path='/shop' element={<ShopPage/>}/>
         <Route path='/rentals' element={<BikePage/>}/>
         <Route path='/tours' element={<TourPage/>}/>
@@ -34,6 +36,7 @@ const App = () => {
         <Route path='/bikes/:id' element={<BikeDetailPage/>}/>
         <Route path="/rent/:id" element={<BikeRentalPage />} />
         <Route path='/tour/:id' element={<TourDetailPage/>}/>
+        <Route path='/booking/:id' element={<TourBooking/>}/>
 
         {/* ProtectedRoute */}
         <Route path='/' element={<ProtectedRoute/>}>

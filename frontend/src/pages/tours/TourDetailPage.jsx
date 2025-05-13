@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../config/AxiosConfig";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { IoPricetagOutline, IoTrailSignOutline } from "react-icons/io5";
@@ -11,6 +11,8 @@ import Footer from "../footer/Footer";
 import TourData from "../../utils/data/TourData";
 import HeadingComponent from "../../components/HeadingComponent";
 import ButtonComponent from "../../components/ButtonComponent";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 
 const TourDetailPage = () => {
   const [tour, setTour] = useState(null);
@@ -18,6 +20,8 @@ const TourDetailPage = () => {
   const [availability, setAvailability] = useState([]);
   const [loading, setLoading] = useState(true);
   const [relatedTours, setRelatedTours] = useState([]);
+  const [auth] = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Overview");
   const { id } = useParams();
 
@@ -33,10 +37,8 @@ const TourDetailPage = () => {
       }
     }
   };
-
   fetchRelatedTours();
   }, [tour]);
-
 
   // Fetch tour details
   useEffect(() => {
@@ -100,6 +102,18 @@ const TourDetailPage = () => {
       </div>
     );
   }
+  
+const toggleTourBooking = (id) => {
+  if (!auth?.user) {
+    toast.info("Please login to book a tour");
+    setTimeout(() => {
+      navigate('/login');
+    }, 3000);
+  } else {
+    navigate(`/book-tour/${id}`);
+  }
+};
+
 
   
 
@@ -212,7 +226,9 @@ const TourDetailPage = () => {
                   </p> 
                   <p>{item.available_slots}</p>
                   <p>{item.availability_status}</p>
-                  <ButtonComponent text="Book Tour" />
+                  <Link to={`/booking/${item.id}`}>
+                   <ButtonComponent text="Book Tour" onClick={toggleTourBooking} />
+                  </Link>
                 </div>
                 ))}
               </div>

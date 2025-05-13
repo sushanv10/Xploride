@@ -75,15 +75,12 @@ exports.getRentalByIdWithUser = async (rentalId) => {
 };
 
 
-// Update rental status (e.g., by admin or system)
-exports.updateRentalStatus = async (req, res) => {
+// Update rental status in rentalModel.js
+exports.updateRentalStatus = async (rentalId, status) => {
     try {
-        const { rentalId } = req.params;
-        const { status } = req.body;
-
         const allowedStatus = ['pending', 'approved', 'rejected', 'booked', 'ongoing', 'completed', 'cancelled'];
         if (!allowedStatus.includes(status)) {
-            return res.status(400).json({ message: "Invalid status provided" });
+            throw new Error("Invalid status provided");
         }
 
         const [rental] = await db.execute(
@@ -92,18 +89,52 @@ exports.updateRentalStatus = async (req, res) => {
         );
 
         if (rental.length === 0) {
-            return res.status(404).json({ message: "Rental not found" });
+            return { notFound: true };
         }
 
-        await db.execute(
+        const [result] = await db.execute(
             `UPDATE bike_rentals SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE rentalId = ?`,
             [status, rentalId]
         );
 
-        res.status(200).json({ message: "Rental status updated successfully", rentalId, updatedStatus: status });
-
+        return { updated: true, result };
     } catch (error) {
         console.error("Error updating rental status:", error);
-        res.status(500).json({ message: "Server Error" });
+        throw error;
+    }
+};
+
+// Get all rentals with user and bike details
+exports.getAllRentals = async () => {
+    try {
+        const [rentals] = await db.execute(
+            `SELECT 
+                br.rentalId,
+                br.bikeId,
+                br.userId,
+                br.status,
+                br.rentStartDate,
+                br.rentEndDate,
+                br.totalAmount,
+                br.identificationImage,
+                br.created_at,
+                br.updated_at,
+                u.userName,
+                u.email,
+                b.bikeName,
+                b.brand
+             FROM 
+                bike_rentals br
+             JOIN 
+                users u ON br.userId = u.userId
+             JOIN
+                bikes b ON br.bikeId = b.bikeId
+             ORDER BY 
+                br.created_at DESC`
+        );
+        return rentals;
+    } catch (error) {
+        console.error("Error fetching all rentals:", error);
+        throw error;
     }
 };
